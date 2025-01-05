@@ -1,0 +1,9 @@
+on:
+  push:
+  
+jobs:
+  salutation:
+      runs-on: ubuntu-latest
+      steps:
+        - run: |
+            echo This is on_push for quebec service

@@ -1,3 +1,5 @@
+name: Quebec service on push
+
 on:
   push:
   

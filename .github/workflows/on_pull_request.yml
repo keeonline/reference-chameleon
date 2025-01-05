@@ -1,7 +1,7 @@
 name: Quebec service on pull request
 
 on:
-  push:
+  pull_request:
   
 jobs:
   salutation:

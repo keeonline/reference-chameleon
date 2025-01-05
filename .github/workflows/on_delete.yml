@@ -1,0 +1,11 @@
+name: Quebec service on delete
+
+on:
+  delete:
+  
+jobs:
+  salutation:
+      runs-on: ubuntu-24.04
+      steps:
+        - run: |
+            echo This is on_delete for quebec service

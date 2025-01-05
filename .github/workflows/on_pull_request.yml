@@ -1,0 +1,11 @@
+name: Quebec service on pull request
+
+on:
+  push:
+  
+jobs:
+  salutation:
+      runs-on: ubuntu-24.04
+      steps:
+        - run: |
+            echo This is on_pull_request for quebec service

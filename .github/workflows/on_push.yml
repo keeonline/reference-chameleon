@@ -8,4 +8,4 @@ jobs:
       runs-on: ubuntu-24.04
       steps:
         - run: |
-            echo This is on_push for quebec service
+            echo This is on_push for quebec service ${{ github.ref_name }}

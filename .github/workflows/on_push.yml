@@ -4,8 +4,25 @@ on:
   push:
   
 jobs:
-  salutation:
+  build-on-push:
       runs-on: ubuntu-24.04
       steps:
-        - run: |
-            echo This is on_push for quebec service
+        - name: salutation
+          run: |
+            echo This is on_push for quebec service. branch=${{ github.ref_name }}
+        - name: Checkout sources
+          uses: actions/checkout@v4
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'temurin'
+            java-version: 22
+        - name: Setup Gradle            
+          uses: gradle/actions/setup-gradle@v4
+        - name: Build with Gradle
+          run: ./gradlew build
+        - name: Upload build artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: Reports
+            path: build/reports         

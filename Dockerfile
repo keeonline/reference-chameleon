@@ -1,6 +1,6 @@
 FROM openjdk:22-jdk-slim
 
-WORKDIR /app
+RUN mkdir /app
 COPY ./build/libs/quebec-0.0.1-SNAPSHOT.jar /app/
 EXPOSE 8080
 

@@ -9,3 +9,5 @@ jobs:
       steps:
         - run: |
             echo This is on_pull_request for quebec service
+
+# add processing to build local image and run intergration tests using docker compose

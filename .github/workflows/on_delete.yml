@@ -2,7 +2,7 @@ name: Quebec service on delete
 
 on:
   delete:
-  
+
 jobs:
   salutation:
       runs-on: ubuntu-24.04

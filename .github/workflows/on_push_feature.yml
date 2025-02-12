@@ -2,7 +2,9 @@ name: Quebec service on push
 
 on:
   push:
-  
+    branches:
+      - '!main'
+
 jobs:
   build-on-push:
       runs-on: ubuntu-24.04

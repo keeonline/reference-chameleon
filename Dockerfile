@@ -1,6 +1,7 @@
-FROM openjdk:22-jdk-slim
+# FROM eclipse-temurin:22-jre-ubi9-minimal
+FROM quebec-base:latest
 
-RUN mkdir /app
+# RUN mkdir /app
 COPY build/libs/quebec-0.0.1-SNAPSHOT.jar /app/
 EXPOSE 8080
 

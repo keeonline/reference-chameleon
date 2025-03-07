@@ -24,14 +24,14 @@ repositories {
 
 dependencyManagement {
 	imports {
-		mavenBom("io.opentelementry.instrumentation:opentelementry-instrumentation-bom:2.13.3")
+		mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.13.3")
 	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'io.opentelementry.instrumentation:opentelementry-instrumentation-spring-boot-starter'
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -23,3 +23,37 @@ jobs:
           curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
           docker-compose --version
+
+      - name: Start the otel comtainer
+        working-directory: servicetest
+        run: |
+          docker-compose up -d otel
+          sleep 10
+          
+      - name: Start the otel comtainer
+        working-directory: servicetest
+        run: |
+          docker-compose up -d quebec
+          sleep 10
+
+      - name: Call greetings endpoint
+        run: | 
+          curl -v -f http://127.0.0.1:18080/public/quebec/greetings
+          sleep 10
+
+      - name: Greetings log
+        run: |
+          docker container logs servicetest-quebec-1
+          sleep 10
+  
+      - name: Greetings log
+        run: |
+          docker container logs servicetest-quebec-1
+          sleep 10
+    
+      - name: Stop and remove the containers   
+        if: always()
+        working-directory: servicetest
+        run: |
+          docker-compose down     
+  

@@ -51,9 +51,9 @@ jobs:
           docker container logs servicetest-quebec-1
           sleep 10
   
-      - name: Greetings log
+      - name: Otel log
         run: |
-          docker container logs servicetest-quebec-1
+          docker container logs servicetest-otel-1
           sleep 10
     
       - name: Stop and remove the containers   

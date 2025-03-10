@@ -1,0 +1,10 @@
+services:
+
+  otel:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+
+  quebec:
+    image: keeonline/quebec:latest
+    ports: 
+      - 127.0.0.1:18080:8080
+    

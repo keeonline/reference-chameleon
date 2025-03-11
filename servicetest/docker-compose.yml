@@ -3,7 +3,7 @@ services:
   otel:
     image: otel/opentelemetry-collector-contrib:0.120.0
     environment:
-      - OTEL_EXPORTER_OLTP_ENDPOINT=http://otel:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4318
 
   quebec:
     image: keeonline/quebec:latest

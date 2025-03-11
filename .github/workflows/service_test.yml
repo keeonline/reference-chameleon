@@ -41,11 +41,16 @@ jobs:
           docker-compose up -d quebec
           sleep 10
 
-      - name: Call greetings endpoint
+      - name: Call greetings endpoint (1)
         run: | 
           curl -v -f http://127.0.0.1:18080/public/quebec/greetings
           sleep 10
 
+      - name: Call greetings endpoint (2)
+        run: | 
+          curl -v -f http://127.0.0.1:18080/public/quebec/greetings
+          sleep 10
+          
       - name: Greetings log
         run: |
           docker container logs servicetest-quebec-1

@@ -1,4 +1,4 @@
-name: Quebec service on push
+name: Chameleon service on push
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
       steps:
         - name: salutation
           run: |
-            echo This is on_push for quebec service. branch=${{ github.ref_name }}
+            echo This is on_push for chameleon service. branch=${{ github.ref_name }}
 
         - name: Checkout sources
           uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
         #   run: ls -lsa ./build/libs
 
         # - name: Build image
-        #   run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/quebec:latest .  
+        #   run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/chameleon:latest .  
 
         # - name: Login to Docker registry
         #   uses: docker/login-action@v3
@@ -49,4 +49,4 @@ jobs:
         #     password: ${{ secrets.DOCKERHUB_TOKEN }}
             
         # - name: Publish image
-        #   run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/quebec:latest
+        #   run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/chameleon:latest

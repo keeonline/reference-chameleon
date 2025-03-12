@@ -1,4 +1,4 @@
-name: Quebec service on delete
+name: Chameleon service on delete
 
 on:
   delete:
@@ -8,4 +8,4 @@ jobs:
       runs-on: ubuntu-24.04
       steps:
         - run: |
-            echo This is on_delete for quebec service
+            echo This is on_delete for chameleon service

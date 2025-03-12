@@ -38,22 +38,22 @@ jobs:
       - name: Start the otel container
         working-directory: servicetest
         run: |
-          docker-compose up -d quebec
+          docker-compose up -d chameleon
           sleep 10
 
       - name: Call greetings endpoint (1)
         run: | 
-          curl -v -f http://127.0.0.1:18080/public/quebec/greetings
+          curl -v -f http://127.0.0.1:18080/chameleon/greetings
           sleep 10
 
       - name: Call greetings endpoint (2)
         run: | 
-          curl -v -f http://127.0.0.1:18080/public/quebec/greetings
+          curl -v -f http://127.0.0.1:18080/chameleon/greetings
           sleep 10
           
       - name: Greetings log
         run: |
-          docker container logs servicetest-quebec-1
+          docker container logs servicetest-chameleon-1
           sleep 10
   
       - name: Otel log

@@ -31,3 +31,15 @@ Note that this will run the image interactively and you can stop it by hittin CT
 add GH for docker build and publish
 
 abc
+
+
+
+Spring Boot can also rely on OS environment variables. On Unix based systems we can write:
+
+`export SERVER_SERVLET_CONTEXT_PATH=/public/alpha`
+
+
+
+also set the service name at runtime
+
+`export SERVICE_NAME=alpha`

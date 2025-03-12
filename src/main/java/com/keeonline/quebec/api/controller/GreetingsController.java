@@ -13,14 +13,20 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @RestController
-@RequestMapping("/public/quebec/greetings")
+@RequestMapping("/greetings")
 public class GreetingsController {
+
+    private String serviceName;
+
+    public GreetingsController() {
+        this.serviceName = System.getenv("SERVICE_NAME") == null ? "noname" : System.getenv("SERVICE_NAME") ;
+    }
 
     @GetMapping(path = "")
     @WithSpan(value = "/greetings")
     public ResponseEntity<GreetingsDto> get() {
 
-        GreetingsDto dto = new GreetingsDto(UUID.randomUUID().toString(),"This is the quebec service!");
+        GreetingsDto dto = new GreetingsDto(serviceName,UUID.randomUUID().toString());
 
         Span span = Span.current();
         span.setAttribute("application.request_id",dto.getRequestId());

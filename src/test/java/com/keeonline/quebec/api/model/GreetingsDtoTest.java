@@ -8,8 +8,11 @@ public class GreetingsDtoTest {
 
     @Test
     void getGreetingsShouldReturnExpectedValue() {
-        GreetingsDto dto = new GreetingsDto();
-        assertEquals("Greetings from the quebec service!", dto.getGreeting());
+        String expectedId = "AAAAAAAA-BBBBBBBB";
+        String expectedGreeting = "Expected greeting!";
+        GreetingsDto dto = new GreetingsDto(expectedId,expectedGreeting);
+        assertEquals(expectedId, dto.getId());
+        assertEquals(expectedGreeting, dto.getGreeting());
     }
 
 }

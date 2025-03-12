@@ -1,15 +1,23 @@
 package com.keeonline.quebec.api.model;
 
-import java.util.UUID;
-
 public class GreetingsDto {
+
+    private String id;
+    private String greeting;
     
-    public String getUuid() {
-        return UUID.randomUUID().toString();
+    public GreetingsDto() {}
+
+    public GreetingsDto (String id,String greeting){
+        this.id = id;
+        this.greeting = greeting;
+    }
+    
+    public String getId() {
+        return id;
     }
 
     public String getGreeting() {
-        return "Greetings from the quebec service!";
+        return greeting;
     }
 
 }

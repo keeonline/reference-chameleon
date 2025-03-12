@@ -20,10 +20,10 @@ public class GreetingsController {
     @WithSpan(value = "/greetings")
     public ResponseEntity<GreetingsDto> get() {
 
-        GreetingsDto dto = new GreetingsDto();
+        GreetingsDto dto = new GreetingsDto(UUID.randomUUID().toString(),"This is the quebec service!");
 
         Span span = Span.current();
-        span.setAttribute("application.request_id",dto.getUuid());
+        span.setAttribute("application.request_id",dto.getId());
 
         return ResponseEntity.ok().body(dto);
     }

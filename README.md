@@ -8,8 +8,7 @@ http://localhost:8080/private/quebec/actuator/info
 
 ## Public URLs
 
-http://localhost:8080/public/quebec/greetings   
-http://localhost:8080/public/quebec/users
+http://localhost:8080/noname/greetings 
 
 ## Docker Image
 

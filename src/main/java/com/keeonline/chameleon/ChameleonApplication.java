@@ -1,13 +1,13 @@
-package com.keeonline.quebec;
+package com.keeonline.chameleon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class QuebecApplication {
+public class ChameleonApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(QuebecApplication.class, args);
+		SpringApplication.run(ChameleonApplication.class, args);
 	}
 
 }

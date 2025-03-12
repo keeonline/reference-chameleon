@@ -1,15 +1,15 @@
-package com.keeonline.quebec.api.model;
+package com.keeonline.chameleon.api.model;
+
+import java.util.UUID;
 
 public class GreetingsDto {
 
-    private String requestId;
     private String serviceName;
-    
-    public GreetingsDto() {}
+    private String requestId;
 
-    public GreetingsDto (String serviceName,String requestId){
+    public GreetingsDto (String serviceName) {
         this.serviceName = serviceName;
-        this.requestId = requestId;
+        this.requestId = UUID.randomUUID().toString();
     }
     
     public String getServiceName() {

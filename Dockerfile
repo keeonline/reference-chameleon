@@ -1,7 +1,5 @@
 FROM eclipse-temurin:23-jre-ubi9-minimal
-# FROM quebec-base:latest
 
-# RUN mkdir /app
 COPY build/libs/quebec-0.0.1-SNAPSHOT.jar /app/
 EXPOSE 8080
 

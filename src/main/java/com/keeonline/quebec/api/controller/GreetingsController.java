@@ -23,7 +23,7 @@ public class GreetingsController {
         GreetingsDto dto = new GreetingsDto(UUID.randomUUID().toString(),"This is the quebec service!");
 
         Span span = Span.current();
-        span.setAttribute("application.request_id",dto.getId());
+        span.setAttribute("application.request_id",dto.getRequestId());
 
         return ResponseEntity.ok().body(dto);
     }

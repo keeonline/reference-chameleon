@@ -2,22 +2,26 @@ package com.keeonline.quebec.api.model;
 
 public class GreetingsDto {
 
-    private String id;
-    private String greeting;
+    private String requestId;
+    private String serviceName;
     
     public GreetingsDto() {}
 
-    public GreetingsDto (String id,String greeting){
-        this.id = id;
-        this.greeting = greeting;
+    public GreetingsDto (String serviceName,String requestId){
+        this.serviceName = serviceName;
+        this.requestId = requestId;
     }
     
-    public String getId() {
-        return id;
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public String getRequestId() {
+        return requestId;
     }
 
     public String getGreeting() {
-        return greeting;
+        return String.format("This is the %s service!",serviceName);
     }
 
 }

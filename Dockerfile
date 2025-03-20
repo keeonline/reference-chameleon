@@ -2,6 +2,7 @@ FROM eclipse-temurin:23-jre-ubi9-minimal
 
 COPY build/libs/chameleon-0.0.1-SNAPSHOT.jar /app/
 EXPOSE 8080
+EXPOSE 9080
 
 ENTRYPOINT ["java","-jar","/app/chameleon-0.0.1-SNAPSHOT.jar"]
 

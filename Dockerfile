@@ -12,3 +12,5 @@ EXPOSE 9080
 ENTRYPOINT ["java","-jar","/opt/app.jar"]
 
 # NOTE: you need an account with Docker and to be logged in to pull the base image from dockerhub
+
+#

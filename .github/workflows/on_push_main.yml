@@ -56,7 +56,7 @@ jobs:
           uses: actions/github-script@v7
           with:
             script: |
-              github.rest.git.creatRef({
+              github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: 'refs/tags/${{steps.version.outputs.version_tag}}'

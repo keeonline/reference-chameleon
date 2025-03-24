@@ -34,7 +34,7 @@ jobs:
           uses: paulhatch/semantic-version@v5.4.0
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.version.outputs.version_tag}} build
+          run: ./gradlew -Pversion=${{steps.version.outputs.version_tag}} build --no-daemon
 
         - name: Upload build artifacts
           uses: actions/upload-artifact@v4

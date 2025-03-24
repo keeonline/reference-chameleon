@@ -1,7 +1,5 @@
 package com.keeonline.chameleon.api.controller;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +15,7 @@ import io.opentelemetry.instrumentation.annotations.WithSpan;
 @RequestMapping("/greetings")
 public class GreetingsController {
 
-    @Value( "${spring.application.name}" )    
+    @Value("${spring.application.name}")
     private String serviceName;
 
     @GetMapping(path = "")
@@ -27,9 +25,9 @@ public class GreetingsController {
         GreetingsDto dto = new GreetingsDto(serviceName);
 
         Span span = Span.current();
-        span.setAttribute("application.request_id",dto.getRequestId());
+        span.setAttribute("application.request_id", dto.getRequestId());
 
         return ResponseEntity.ok().body(dto);
     }
-    
+
 }

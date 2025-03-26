@@ -1,4 +1,4 @@
-name: Run tests
+name: Run the SITs
 
 on:
   workflow_dispatch:

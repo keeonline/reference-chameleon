@@ -29,6 +29,12 @@ jobs:
           chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
+      - name: Create docker composer environment file
+        run: | 
+          echo "DOCKERHUB_USERNAME=${{secrets.DOCKERHUB_USERNAME}}" >> .env
+          echo "BRANCH_NAME=${{github.ref_name}}" >> .env
+          cat .env          
+
       - name: Start the otel container
         working-directory: servicetest
         run: |
@@ -38,9 +44,6 @@ jobs:
       - name: Start the otel container
         working-directory: servicetest
         run: |
-          echo "DOCKER_USERNAME=${{secrets.DOCKERHUB_USERNAME}}" >> .env
-          echo "BRANCH_NAME=${{github.ref_name}}" >> .env
-          cat .env
           docker-compose up -d chameleon
           sleep 10
 

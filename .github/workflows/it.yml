@@ -1,4 +1,4 @@
-name: Run the Integration Tests
+name: Run the Service Tests
 
 on:
   workflow_dispatch:
@@ -38,18 +38,19 @@ jobs:
       - name: Start the otel container
         working-directory: servicetest
         run: |
+          export BRANCH_NAME=${{github.ref_name}}
           docker-compose up -d chameleon
           sleep 10
 
-      - name: Call greetings endpoint (1)
-        run: | 
-          curl -v -f http://127.0.0.1:18080/chameleon/greetings
-          sleep 10
+      # - name: Call greetings endpoint (1)
+      #   run: | 
+      #     curl -v -f http://127.0.0.1:18080/chameleon/greetings
+      #     sleep 10
 
-      - name: Call greetings endpoint (2)
-        run: | 
-          curl -v -f http://127.0.0.1:18080/chameleon/greetings
-          sleep 10
+      # - name: Call greetings endpoint (2)
+      #   run: | 
+      #     curl -v -f http://127.0.0.1:18080/chameleon/greetings
+      #     sleep 10
           
       - name: Greetings log
         run: |

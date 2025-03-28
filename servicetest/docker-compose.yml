@@ -4,7 +4,7 @@ services:
     image: otel/opentelemetry-collector-contrib:0.120.0
 
   chameleon:
-    image: "keeonline/chameleon:${BRANCH_NAME}-latest"
+    image: ${DOCKER_USERNAME}/chameleon:${BRANCH_NAME}-latest
     ports: 
       - localhost:18080:8080
     environment:

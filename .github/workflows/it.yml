@@ -38,7 +38,9 @@ jobs:
       - name: Start the otel container
         working-directory: servicetest
         run: |
-          export BRANCH_NAME=${{github.ref_name}}
+          echo "DOCKER_USERNAME=${{secrets.DOCKERHUB_USERNAME}}" >> .env
+          echo "BRANCH_NAME=${{github.ref_name}}" >> .env
+          cat .env
           docker-compose up -d chameleon
           sleep 10
 

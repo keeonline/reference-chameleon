@@ -46,16 +46,16 @@ jobs:
           run: ls -lsa ./build/libs
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.version.outputs.version_tag}} -t ${{secrets.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.version_tag}} .  
+          run: docker build --build-arg VERSION=${{steps.version.outputs.version_tag}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.version_tag}} .  
 
         - name: Login to Docker registry
           uses: docker/login-action@v3
           with:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
+            username: ${{vars.DOCKERHUB_USERNAME}}
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.version_tag}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.version_tag}}
           
         - name: Tag the repository with the semantic version
           uses: actions/github-script@v7

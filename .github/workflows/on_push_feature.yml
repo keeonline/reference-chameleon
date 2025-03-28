@@ -7,7 +7,7 @@ on:
       - '!main'
 
 jobs:
-  push-to-main:
+  push-to-feature:
       runs-on: ubuntu-24.04
       permissions:
         contents: write
@@ -48,13 +48,13 @@ jobs:
           run: ls -lsa ./build/libs
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{secrets.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
+          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
 
         - name: Login to Docker registry
           uses: docker/login-action@v3
           with:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
+            username: ${{vars.DOCKERHUB_USERNAME}}
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}

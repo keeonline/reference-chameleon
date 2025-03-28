@@ -37,4 +37,5 @@ out/
 .vscode/
 
 ### karate ###
-sit/target
+it/karate/target
+sit/karate/target

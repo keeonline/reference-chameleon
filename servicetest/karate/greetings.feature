@@ -6,7 +6,7 @@ Feature: Call the greetings endpoints of the chameleon service
     When method GET
     Then status 200
     * match response.serviceName == 'chameleon'
-    * match response.greeting == 'chameleon'
+    * match response.greeting == 'This is the chameleon service!'
 
   Scenario: Call to service endpoints that has no request handler
     Given url 'http://localhost:18080'

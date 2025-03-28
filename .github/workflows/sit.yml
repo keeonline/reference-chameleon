@@ -23,12 +23,11 @@ jobs:
           java-version: '23'
 
       - name: Download the standalone karate jar
-        working-directory: sit
         run: |
-          wget -O karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
+          wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
 
       - name: Execute the SITs using karate
-        working-directory: sit
+        working-directory: sit/karate
         run: |
-          java -jar karate.jar -h
+          java -jar /opt/karate.jar -h
   

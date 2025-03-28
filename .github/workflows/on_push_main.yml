@@ -6,7 +6,7 @@ on:
       - main
         
 jobs:
-  build-on-push:
+  push-to-main:
       runs-on: ubuntu-24.04
       permissions:
         contents: write
@@ -56,6 +56,7 @@ jobs:
             
         - name: Publish image
           run: docker push ${{secrets.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.version_tag}}
+          
         - name: Tag the repository with the semantic version
           uses: actions/github-script@v7
           with:

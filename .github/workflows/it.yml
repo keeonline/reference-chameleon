@@ -60,7 +60,7 @@ jobs:
       - name: Execute the service tests using karate
         working-directory: servicetest/karate
         run: |
-          java -jar /opt/karate.jar -h
+          java -jar /opt/karate.jar .
               
       - name: Greetings log
         run: |

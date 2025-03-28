@@ -1,4 +1,4 @@
-name: Run the SITs
+name: Run the System Integration Tests
 
 on:
   workflow_dispatch:

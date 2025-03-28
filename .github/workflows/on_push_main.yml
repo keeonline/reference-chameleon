@@ -1,4 +1,4 @@
-name: Chameleon service on push
+name: Push to main branch
 
 on:
   push:

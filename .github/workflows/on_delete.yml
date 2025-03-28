@@ -1,4 +1,4 @@
-name: Chameleon service on delete
+name: Delete branch
 
 on:
   delete:

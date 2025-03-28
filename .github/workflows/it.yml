@@ -57,8 +57,8 @@ jobs:
         run: |
           wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
   
-      - name: Execute the SITs using karate
-        working-directory: it/karate
+      - name: Execute the service tests using karate
+        working-directory: servicetest/karate
         run: |
           java -jar /opt/karate.jar -h
               

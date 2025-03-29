@@ -7,6 +7,7 @@ services:
     image: ${DOCKERHUB_USERNAME}/chameleon:${BRANCH_NAME}-latest
     ports: 
       - 18080:8080
+      - 19080:9080
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4318
     

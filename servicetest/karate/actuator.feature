@@ -11,4 +11,4 @@ Scenario: Successful call to actuator 'info' endpoint
     And path 'chameleon/actuator/info'
     When method GET
     Then status 200
-    # * match response.status == 'UP'
+    * match response.build.artifact == 'chameleon'

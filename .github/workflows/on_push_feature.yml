@@ -48,7 +48,7 @@ jobs:
           if: always()
           uses: ctrf-io/github-test-reporter@v1
           with:
-            report-path: './ctrf/*.json'
+            report-path: './build/test-results/test/TEST-com.keeonline.chameleon.api.controller.GreetingsControllerTest.xml'
             integrations-config: |
               {
                 "junit-to-ctrf": {
@@ -59,7 +59,7 @@ jobs:
                     "toolname": "junit-to-ctrf",
                     "useSuiteName": false,
                     "env": {
-                      "appName": "my-app"
+                      "appName": "chameleon"
                     }
                   }
                 }

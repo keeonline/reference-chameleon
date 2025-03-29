@@ -44,6 +44,18 @@ jobs:
             name: Reports
             path: build/reports
 
+        - name: Build image
+          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
+
+        - name: Login to Docker registry
+          uses: docker/login-action@v3
+          with:
+            username: ${{vars.DOCKERHUB_USERNAME}}
+            password: ${{secrets.DOCKERHUB_TOKEN}}
+            
+        - name: Publish image
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+
         - name: Publish Test Report
           if: always()
           uses: ctrf-io/github-test-reporter@v1
@@ -76,14 +88,3 @@ jobs:
           run: |
             ls -lsa ./.github/badges
 
-        - name: Build image
-          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
-
-        - name: Login to Docker registry
-          uses: docker/login-action@v3
-          with:
-            username: ${{vars.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_TOKEN}}
-            
-        - name: Publish image
-          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}

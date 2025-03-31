@@ -85,6 +85,13 @@ jobs:
             chmod +x /usr/local/bin/docker-compose
             docker-compose --version
 
+        - name: Create docker compose environment file
+          working-directory: servicetest
+          run: | 
+            echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
+            echo "BRANCH_NAME=${{github.ref_name}}" >> .env
+            cat .env          
+    
         - name: Start the otel container
           working-directory: servicetest
           run: |

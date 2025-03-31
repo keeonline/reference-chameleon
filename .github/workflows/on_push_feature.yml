@@ -38,10 +38,10 @@ jobs:
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon
 
-        - name: Upload build artifacts
+        - name: Upload build reports
           uses: actions/upload-artifact@v4
           with:
-            name: Reports
+            name: Build Reports
             path: build/reports
 
         - name: Build image
@@ -56,35 +56,35 @@ jobs:
         - name: Publish image
           run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
 
-        - name: Publish Test Report
-          if: always()
-          uses: ctrf-io/github-test-reporter@v1
-          with:
-            # report-path: './build/test-results/test/TEST-com.keeonline.chameleon.api.controller.GreetingsControllerTest.xml'
-            report-path: './build/test-results/test/*.xml'
-            integrations-config: |
-              {
-                "junit-to-ctrf": {
-                  "enabled": true,
-                  "action": "convert",
-                  "options": {
-                    "output": "./ctrf-reports/ctrf-report.json",
-                    "toolname": "junit-to-ctrf",
-                    "useSuiteName": false,
-                    "env": {
-                      "appName": "chameleon"
-                    }
-                  }
-                }
-              }
+        # - name: Publish Test Report
+        #   if: always()
+        #   uses: ctrf-io/github-test-reporter@v1
+        #   with:
+        #     # report-path: './build/test-results/test/TEST-com.keeonline.chameleon.api.controller.GreetingsControllerTest.xml'
+        #     report-path: './build/test-results/test/*.xml'
+        #     integrations-config: |
+        #       {
+        #         "junit-to-ctrf": {
+        #           "enabled": true,
+        #           "action": "convert",
+        #           "options": {
+        #             "output": "./ctrf-reports/ctrf-report.json",
+        #             "toolname": "junit-to-ctrf",
+        #             "useSuiteName": false,
+        #             "env": {
+        #               "appName": "chameleon"
+        #             }
+        #           }
+        #         }
+        #       }
 
-        - name: Generate JaCoCo Badge
-          uses: cicirello/jacoco-badge-generator@v2
-          with:
-            generate-branches-badge: true
-            jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+        # - name: Generate JaCoCo Badge
+        #   uses: cicirello/jacoco-badge-generator@v2
+        #   with:
+        #     generate-branches-badge: true
+        #     jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
 
-        - name: List files
-          run: |
-            ls -lsa ./.github/badges
+        # - name: List files
+        #   run: |
+        #     ls -lsa ./.github/badges
 

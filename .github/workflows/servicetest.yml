@@ -62,6 +62,12 @@ jobs:
         run: |
           java -jar /opt/karate.jar .
               
+      - name: Upload service test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: Service Test Reports
+          path: servicetest/karate/target/karate-reports
+  
       - name: Greetings log
         run: |
           docker container logs servicetest-chameleon-1

@@ -48,7 +48,9 @@ test {
 
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
-	reports {
-		csv.required = true
-	}
+	
+	// NOTE: the below is require if integrating coverage into workflow
+	// reports {
+	// 	csv.required = true
+	// }
 }

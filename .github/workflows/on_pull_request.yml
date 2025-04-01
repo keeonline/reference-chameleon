@@ -11,10 +11,17 @@ jobs:
           run: |
             echo This is on_pull_request for chameleon service
 
-        - name: deploy IaC
-          run: |
-            echo "placeholder"
+        - name: Checkout IaC repo
+          uses: actions/checkout@v4
+          with:
+            repository: keeonline/infra-01-aws
+            path: iac
 
+        - name: list IaC files
+          run: |
+            ls -lsa iac
+  
+  
 # This should trigger a 'repository_dispatch' to execute the IaC with a given sha and set of args ???
 
 # add processing to build local image and run intergration tests using docker compose

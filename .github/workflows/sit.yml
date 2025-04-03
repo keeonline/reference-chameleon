@@ -58,6 +58,7 @@ jobs:
             -backend-config="dynamodb_table=terraform-lock"
 
       - name: Provision platform infrastructure
+        working-directory: sit
         run: | 
           terraform apply -auto-approve -input=false
 
@@ -80,6 +81,7 @@ jobs:
       #     java -jar /opt/karate.jar -h
 
       - name: Destroy platform infrastructure
+        working-directory: sit
         run: | 
           terraform destroy -auto-approve -input=false
 

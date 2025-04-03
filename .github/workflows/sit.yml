@@ -62,8 +62,6 @@ jobs:
         run: | 
           terraform apply -auto-approve -input=false
 
-      # # This should trigger a 'repository_dispatch' to execute the IaC with a given sha and set of args ???
-
       # # add processing to build local image and run intergration tests using docker compose
 
       # - uses: actions/setup-java@v4

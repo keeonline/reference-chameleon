@@ -28,7 +28,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ref in following statement is either a tag or branch, e.g. 'v0.0.1' or 'feature-123'
       - name: Checkout IaC repo
         uses: actions/checkout@v4
         with:
@@ -56,7 +55,11 @@ jobs:
             -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
             -backend-config="key=${{inputs.environment}}-${{github.event.repository.name}}.tfstate" \
             -backend-config="region=${{secrets.AWS_REGION}}" \
-            -backend-config="dynamodb_table=terraform-lock" \
+            -backend-config="dynamodb_table=terraform-lock"
+
+      - name: Provision platform infrastructure
+        run: | 
+          terraform apply -auto-approve -input=false
 
       # # This should trigger a 'repository_dispatch' to execute the IaC with a given sha and set of args ???
 
@@ -75,4 +78,8 @@ jobs:
       #   working-directory: sit/karate
       #   run: |
       #     java -jar /opt/karate.jar -h
-  
+
+      - name: Destroy platform infrastructure
+        run: | 
+          terraform destroy -auto-approve -input=false
+

@@ -49,6 +49,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3.1.2
 
       - name: Terraform init
+        working-directory: iac/terraform
         run: | 
           terraform init \
             -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \

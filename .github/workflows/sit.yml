@@ -35,22 +35,23 @@ jobs:
         run: |
           ls -lsa iac
 
-      # - name: Configure credentials
-      #   uses: aws-actions/configure-aws-credentials/@v4
-      #   with:
-      #     role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
-      #     aws-region: ${{secrets.AWS_REGION}}
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
 
-      # - name: Install Terraform on runner
-      #   uses: hashicorp/setup-terraform@v3.1.2
+      - name: Install Terraform on runner
+        uses: hashicorp/setup-terraform@v3.1.2
 
-      # - name: Terraform init
-      #   run: | 
-      #     terraform init \
-      #       -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
-      #       -backend-config="key=${{inputs.environment}}-${{github.event.repository.name}}.tfstate" \
-      #       -backend-config="region=${{secrets.AWS_REGION}}" \
-      #       -backend-config="dynamodb_table=terraform-lock" \
+      - name: Terraform init
+        working-directory: sit
+        run: | 
+          terraform init \
+            -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
+            -backend-config="key=${{inputs.environment}}-${{github.event.repository.name}}.tfstate" \
+            -backend-config="region=${{secrets.AWS_REGION}}" \
+            -backend-config="dynamodb_table=terraform-lock" \
 
       # # This should trigger a 'repository_dispatch' to execute the IaC with a given sha and set of args ???
 

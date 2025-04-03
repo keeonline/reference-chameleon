@@ -49,7 +49,6 @@ jobs:
         uses: hashicorp/setup-terraform@v3.1.2
 
       - name: Terraform init
-        working-directory: sit
         run: | 
           terraform init \
             -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
@@ -58,7 +57,7 @@ jobs:
             -backend-config="dynamodb_table=terraform-lock"
 
       - name: Provision platform infrastructure
-        working-directory: sit
+        working-directory: iac/terraform
         run: | 
           terraform apply -auto-approve -input=false
 
@@ -81,7 +80,7 @@ jobs:
       #     java -jar /opt/karate.jar -h
 
       - name: Destroy platform infrastructure
-        working-directory: sit
+        working-directory: iac/terraform
         run: | 
           terraform destroy -auto-approve -input=false
 

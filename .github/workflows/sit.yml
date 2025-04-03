@@ -3,6 +3,11 @@ name: Run the System Integration Tests
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        type: environment
+        description: The GitHub environment
+        required: false
+        default: test
       iac-ref:
         type: string
         description: The reference (tag or branch e.g., 'tags/v0.0.1' or 'heads/feature-123') of the IaC codebase

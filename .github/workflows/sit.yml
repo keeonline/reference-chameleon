@@ -7,7 +7,7 @@ on:
         type: string
         description: The reference (tag or branch e.g., 'tags/v0.0.1' or 'heads/feature-123') of the IaC codebase
         required: false
-        default: heads/main
+        default: main
 
 jobs:
   execute:
@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ref in following statement is either a tag or branch, e.g. 'tags/v0.0.1' or 'heads/feature-123'
+      # ref in following statement is either a tag or branch, e.g. 'v0.0.1' or 'feature-123'
       - name: Checkout IaC repo
         uses: actions/checkout@v4
         with:

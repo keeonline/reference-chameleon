@@ -15,9 +15,15 @@ on:
         default: apply-plan
       environment:
         type: environment
-        description: The targeted GitHub environment
+        description: The application environment name
         required: false
         default: test
+      infra_environment:
+        type: string
+        description: The infrastructure environment into which the app will be deployed
+        required: true
+        default: test
+  
 
 jobs:
   execute:
@@ -27,7 +33,9 @@ jobs:
       id-token: write
     runs-on: ubuntu-24.04
     env:
-      TF_VAR_environment: ${{inputs.environment}}
+      TF_VAR_infra_environment: ${{inputs.infra_environment}}
+      TF_VAR_app_environment: ${{inputs.environment}}
+      TF_VAR_iac_version: ${{github.ref_name}}
     defaults:
       run:
         working-directory: terraform

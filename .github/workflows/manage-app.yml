@@ -30,7 +30,7 @@ jobs:
       TF_VAR_environment: ${{inputs.environment}}
     defaults:
       run:
-        working-directory: terraform/core
+        working-directory: terraform
     steps:
       - name: Clone the repository
         uses: actions/checkout/@v4

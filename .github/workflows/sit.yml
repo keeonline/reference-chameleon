@@ -2,6 +2,17 @@ name: Run the System Integration Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The GitHub environment
+        required: false
+        default: test
+      iac-ref:
+        type: string
+        description: The reference (tag or branch e.g., 'v0.0.1' or 'feature-123') of the IaC codebase
+        required: false
+        default: main
 
 jobs:
   execute:
@@ -10,6 +21,8 @@ jobs:
       contents: write
       id-token: write
     runs-on: ubuntu-24.04
+    env:
+      TF_VAR_environment: ${{inputs.environment}}
     steps:
 
       - name: Checkout source code
@@ -17,17 +30,58 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-java@v4
+      - name: Checkout IaC repo
+        uses: actions/checkout@v4
         with:
-          distribution: 'temurin'
-          java-version: '23'
+          repository: keeonline/infra-01-aws
+          ref: ${{inputs.iac-ref}}
+          path: iac
 
-      - name: Download the standalone karate jar
+      - name: list IaC files
         run: |
-          wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
+          ls -lsa iac
 
-      - name: Execute the SITs using karate
-        working-directory: sit/karate
-        run: |
-          java -jar /opt/karate.jar -h
-  
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Install Terraform on runner
+        uses: hashicorp/setup-terraform@v3.1.2
+
+      - name: Terraform init
+        working-directory: iac/terraform
+        run: | 
+          terraform init \
+            -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
+            -backend-config="key=${{inputs.environment}}-${{github.event.repository.name}}.tfstate" \
+            -backend-config="region=${{secrets.AWS_REGION}}" \
+            -backend-config="dynamodb_table=terraform-lock"
+
+      - name: Provision platform infrastructure
+        working-directory: iac/terraform
+        run: | 
+          terraform apply -auto-approve -input=false
+
+      # # add processing to build local image and run intergration tests using docker compose
+
+      # - uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'temurin'
+      #     java-version: '23'
+
+      # - name: Download the standalone karate jar
+      #   run: |
+      #     wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
+
+      # - name: Execute the SITs using karate
+      #   working-directory: sit/karate
+      #   run: |
+      #     java -jar /opt/karate.jar -h
+
+      - name: Destroy platform infrastructure
+        working-directory: iac/terraform
+        run: | 
+          terraform destroy -auto-approve -input=false
+

@@ -17,7 +17,7 @@ Feature: Call the greetings endpoints of the chameleon service
     * match response.error == 'Not Found'
     * match response.path == '/chameleon/like'
 
-  Scenario: Call to a chameleon varisnt service that is not deployed
+  Scenario: Call to a chameleon variant service that is not deployed
     Given url 'http://localhost:18080'
     And path 'zulu/greetings'
     When method GET

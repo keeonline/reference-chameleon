@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "alpha" {
-  family                   = "${var.app_environment}-applications"
+  family                   = "${var.app_environment}-family-alpha"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256

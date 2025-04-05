@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "bravo" {
-  family                   = "${var.app_environment}-applications"
+  family                   = "${var.app_environment}-family-bravo"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256

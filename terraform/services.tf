@@ -2,10 +2,10 @@
 resource "aws_security_group" "service" {
   name        = "${var.app_environment}-sg-service"
   description = "Security group for ECS services running on Fargate"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = data.aws_vpc.main.id
 
   tags = {
-    Name = "${var.app_environment}-sg-service"
+    Name        = "${var.app_environment}-sg-service"
     Environment = "${var.app_environment}"
     Category    = "application"
     Version     = "${var.iac_version}"

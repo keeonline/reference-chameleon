@@ -100,7 +100,7 @@ resource "aws_ecs_service" "bravo" {
 
   network_configuration {
     security_groups  = [aws_security_group.service.id]
-    subnets          = data.aws_subnet.private.*.id
+    subnets          = data.aws_subnets.private.ids
     assign_public_ip = false
   }
 

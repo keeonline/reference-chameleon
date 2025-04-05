@@ -6,6 +6,7 @@ resource "aws_ecs_task_definition" "alpha" {
   memory                   = 512
   execution_role_arn       = data.aws_iam_role.ecs_task_exec.arn
   task_role_arn            = data.aws_iam_role.ecs_task.arn
+
   container_definitions = jsonencode([
     {
       name  = "${var.app_environment}-task-alpha"
@@ -25,6 +26,13 @@ resource "aws_ecs_task_definition" "alpha" {
       ]
     }
   ])
+
+  tags = {
+    Name        = "${var.app_environment}-task-alpha"
+    Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
+  }
 }
 
 resource "aws_lb_target_group" "alpha" {
@@ -48,6 +56,8 @@ resource "aws_lb_target_group" "alpha" {
   tags = {
     Name        = "${var.app_environment}-tg-alpha"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -69,6 +79,8 @@ resource "aws_lb_listener_rule" "alpha" {
   tags = {
     Name        = "${var.app_environment}-alb-listener-rule-alpha"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -94,5 +106,7 @@ resource "aws_ecs_service" "alpha" {
   tags = {
     Name        = "${var.app_environment}-ecs-service-alpha"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }

@@ -6,6 +6,7 @@ resource "aws_ecs_task_definition" "bravo" {
   memory                   = 512
   execution_role_arn       = data.aws_iam_role.ecs_task_exec.arn
   task_role_arn            = data.aws_iam_role.ecs_task.arn
+
   container_definitions = jsonencode([
     {
       name  = "${var.app_environment}-task-bravo"
@@ -25,6 +26,13 @@ resource "aws_ecs_task_definition" "bravo" {
       ]
     }
   ])
+
+  tags = {
+    Name        = "${var.app_environment}-task-bravo"
+    Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
+  }
 }
 
 resource "aws_lb_target_group" "bravo" {
@@ -48,12 +56,14 @@ resource "aws_lb_target_group" "bravo" {
   tags = {
     Name        = "${var.app_environment}-tg-bravo"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 
 }
 
 resource "aws_lb_listener_rule" "bravo" {
-  listener_arn = data.aws_lb_listener.http.arn
+  listener_arn = data.aws_lb_listener.api_requests.arn
   priority     = 20
 
   action {
@@ -70,6 +80,8 @@ resource "aws_lb_listener_rule" "bravo" {
   tags = {
     Name        = "${var.app_environment}-alb-listener-rule-bravo"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -95,5 +107,7 @@ resource "aws_ecs_service" "bravo" {
   tags = {
     Name        = "${var.app_environment}-ecs-service-bravo"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }

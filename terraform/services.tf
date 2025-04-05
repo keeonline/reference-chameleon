@@ -1,57 +1,4 @@
-############
-# NOTE
-# This file should be moved to a new folder called 'services' within the infrastructure project(?)
-
-
-data "aws_lb" "alb" {
-  name = "${var.infra_environment}-alb"
-}
-
-data "aws_subnets" "public" {
-  filter {
-    name   = "tag:Environment"
-    values = ["${var.infra_environment}"]
-  }
-
-  filter {
-    name   = "tag:Public"
-    values = ["yes"]
-  }
-
-  depends_on = [data.aws_lb.alb]
-}
-
-data "aws_subnet" "public" {
-  for_each = toset(data.aws_subnets.public.ids)
-  id       = each.value
-}
-
-data "aws_subnets" "private" {
-  filter {
-    name   = "tag:Environment"
-    values = ["${var.infra_environment}"]
-  }
-
-  filter {
-    name   = "tag:Public"
-    values = ["no"]
-  }
-
-  depends_on = [data.aws_lb.alb]
-}
-
-data "aws_subnet" "private" {
-  for_each = toset(data.aws_subnets.private.ids)
-  id       = each.value
-}
-
-locals {
-  public_subnet_cidr_blocks = [for s in data.aws_subnet.public : s.cidr_block]
-  private_subnet_cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
-}
-
 # Create a security group for subsequent use by services to allow traffic ingress and access to the NAT gateway
-
 resource "aws_security_group" "service" {
   name        = "${var.app_environment}-sg-service"
   description = "Security group for ECS services running on Fargate"
@@ -59,13 +6,16 @@ resource "aws_security_group" "service" {
 
   tags = {
     Name = "${var.app_environment}-sg-service"
+    Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "service_traffic" {
-  count             = length(local.public_subnet_cidr_blocks)
+resource "aws_vpc_security_group_ingress_rule" "api_requests" {
+  count             = length(data.aws_subnet.public)
   security_group_id = aws_security_group.service.id
-  cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
+  cidr_ipv4         = data.aws_subnet.public[count.index].cidr_block
   from_port         = 8080
   ip_protocol       = "tcp"
   to_port           = 8080
@@ -73,13 +23,15 @@ resource "aws_vpc_security_group_ingress_rule" "service_traffic" {
   tags = {
     Name        = "${var.app_environment}-sg-ingress-rule-service-traffic-${count.index}"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "service_management" {
-  count             = length(local.public_subnet_cidr_blocks)
+  count             = length(data.aws_subnet.public)
   security_group_id = aws_security_group.service.id
-  cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
+  cidr_ipv4         = data.aws_subnet.public[count.index].cidr_block
   from_port         = 9080
   ip_protocol       = "tcp"
   to_port           = 9080
@@ -87,6 +39,8 @@ resource "aws_vpc_security_group_ingress_rule" "service_management" {
   tags = {
     Name        = "${var.app_environment}-sg-ingress-rule-service-management-${count.index}"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -98,5 +52,7 @@ resource "aws_vpc_security_group_egress_rule" "service" {
   tags = {
     Name        = "${var.app_environment}-sg-egress-rule-service"
     Environment = "${var.app_environment}"
+    Category    = "application"
+    Version     = "${var.iac_version}"
   }
 }

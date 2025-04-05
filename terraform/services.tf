@@ -12,10 +12,14 @@ resource "aws_security_group" "service" {
   }
 }
 
+locals {
+  public_cidr_blocks = [for s in data.aws_subnet.public : s.cidr_block]
+}
+
 resource "aws_vpc_security_group_ingress_rule" "api_requests" {
-  count             = length(data.aws_subnet.public)
+  count             = length(local.public_cidr_blocks)
   security_group_id = aws_security_group.service.id
-  cidr_ipv4         = data.aws_subnet.public[count.index].cidr_block
+  cidr_ipv4         = local.public_cidr_blocks[count.index]
   from_port         = 8080
   ip_protocol       = "tcp"
   to_port           = 8080
@@ -29,9 +33,9 @@ resource "aws_vpc_security_group_ingress_rule" "api_requests" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "service_management" {
-  count             = length(data.aws_subnet.public)
+  count             = length(local.public_cidr_blocks)
   security_group_id = aws_security_group.service.id
-  cidr_ipv4         = data.aws_subnet.public[count.index].cidr_block
+  cidr_ipv4         = local.public_cidr_blocks[count.index]
   from_port         = 9080
   ip_protocol       = "tcp"
   to_port           = 9080

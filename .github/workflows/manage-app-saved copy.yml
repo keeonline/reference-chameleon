@@ -12,11 +12,11 @@ on:
 jobs:
   manage-core-infrastructure:
     name: Manage core infrastructure resources
-    uses: ./.github/workflows/reusable-core.yml
+    uses: keeonline/infra-01-aws/.github/workflows/reusable-core.yml@v0.0.15
     with:
       action: apply
       environment: ${{vars.INFRA_ENVIRONMENT}}
-      iac_version: ${{vars.INFRA_VERSION}}
+      # iac_version: ${{vars.INFRA_VERSION}}
     secrets: inherit
     permissions:
       contents: write

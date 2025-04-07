@@ -1,4 +1,4 @@
-name: Manage application related resources SAVED
+name: Manage application related resources
 
 on:
   workflow_dispatch:

@@ -1,0 +1,25 @@
+name: Manage application related resources SAVED
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The application environment name
+        required: false
+        default: test  
+
+jobs:
+  manage-core-infrastructure:
+    name: Manage core infrastructure resources
+    uses: ./.github/workflows/reusable-core.yml
+    with:
+      action: apply
+      environment: ${{vars.INFRA_ENVIRONMENT}}
+      iac_version: ${{vars.INFRA_VERSION}}
+    secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
+
+

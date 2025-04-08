@@ -14,7 +14,7 @@ jobs:
     name: Manage core infrastructure resources
     uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
-      action: apply
+      action: apply-plan
       # environment: ${{vars.INFRA_ENVIRONMENT}}
       environment: test
       iac_ref: v0.0.17

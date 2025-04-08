@@ -15,7 +15,8 @@ jobs:
     uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
       action: apply
-      environment: ${{env.INFRA_ENVIRONMENT}}
+      # environment: ${{vars.INFRA_ENVIRONMENT}}
+      environment: test
       iac_ref: v0.0.17
     secrets: inherit
     permissions:

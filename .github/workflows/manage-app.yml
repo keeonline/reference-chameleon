@@ -23,7 +23,7 @@ jobs:
           echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT    
 
   provision-core-infrastructure:
-    name: Manage core infrastructure resources
+    name: Provision core infrastructure resources
     needs: propagate-github-env-vars
     uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
@@ -36,8 +36,8 @@ jobs:
       id-token: write
 
   destroy-core-infrastructure:
-    name: Manage core infrastructure resources
-    needs: provision-core-infrastructure
+    name: Destroy core infrastructure resources
+    needs: [propagate-github-env-vars,provision-core-infrastructure]
     uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
       action: destroy

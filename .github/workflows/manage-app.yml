@@ -16,7 +16,7 @@ jobs:
     with:
       action: apply
       environment: ${{vars.INFRA_ENVIRONMENT}}
-      iac_version: v0.0.17
+      iac_ref: v0.0.17
     secrets: inherit
     permissions:
       contents: write

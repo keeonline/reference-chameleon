@@ -10,7 +10,8 @@ on:
         default: test  
 
 jobs:
-  envars:
+  propagate-github-env-vars:
+    name: Propogate GitHub Environment variables
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     outputs:
@@ -23,11 +24,11 @@ jobs:
 
   manage-core-infrastructure:
     name: Manage core infrastructure resources
-    needs: envars
+    needs: propagate-github-env-vars
     uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
-      action: apply-plan
-      environment: ${{needs.envars.outputs.infra_environment}}
+      action: apply
+      environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
       iac_ref: v0.0.17
     secrets: inherit
     permissions:

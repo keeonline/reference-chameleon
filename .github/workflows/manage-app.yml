@@ -1,4 +1,4 @@
-name: Manage application related resources
+name: Manage application
 
 on:
   workflow_dispatch:
@@ -12,11 +12,11 @@ on:
 jobs:
   manage-core-infrastructure:
     name: Manage core infrastructure resources
-    uses: keeonline/infra-01-aws/.github/workflows/reusable-core.yml@v0.0.16
+    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
       action: apply
       environment: ${{vars.INFRA_ENVIRONMENT}}
-      iac_version: v0.0.16
+      iac_version: v0.0.17
     secrets: inherit
     permissions:
       contents: write

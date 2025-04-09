@@ -8,21 +8,23 @@ on:
         description: The application environment name
         required: false
         default: test  
-
+      
 jobs:
+
   show: 
     name: Show
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
-    steps:
-      - name: toJson
-        id: toJson
-        run: |
-          echo "value=${{ toJson(vars) }}" >> $GITHUB_OUTPUT 
-      - name: fromJson
-        id: fromJson
-        run: |
-          echo "${{ steps.toJson.outputs.value }}"
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev
+    with:
+      action: apply
+      repo_owner: keeonline
+      repo_name: infra-01-aws
+      work_dir: terraform/core
+      environment: ${{inputs.environment}}
+      iac_ref: v0.0.17
+    secrets: inherit
+  #   permissions:
+  #     contents: write
+  #     id-token: write
   
   # propagate-github-env-vars:
   #   name: Propagate GitHub Environment variables

@@ -25,9 +25,12 @@ jobs:
   provision-core-infrastructure:
     name: Provision core infrastructure resources
     needs: propagate-github-env-vars
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
+    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@dev-reuse
     with:
       action: apply
+      repo_owner: keeonline
+      repo_name: infra-01-aws
+      workdir: terraform/core
       environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
       iac_ref: v0.0.17
     secrets: inherit
@@ -38,9 +41,12 @@ jobs:
   destroy-core-infrastructure:
     name: Destroy core infrastructure resources
     needs: [propagate-github-env-vars,provision-core-infrastructure]
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
+    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@dev-reuse
     with:
       action: destroy
+      repo_owner: keeonline
+      repo_name: infra-01-aws
+      workdir: terraform/core
       environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
       iac_ref: v0.0.17
     secrets: inherit

@@ -10,16 +10,47 @@ on:
         default: test  
 
 jobs:
-  manage-core-infrastructure:
-    name: Manage core infrastructure resources
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
+  propagate-github-env-vars:
+    name: Propagate GitHub Environment variables
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    outputs:
+      infra_environment: ${{ steps.infenv.outputs.value }}
+    steps:
+      - name: Get infrastructure environment name
+        id: infenv
+        run: |
+          echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT    
+
+  provision-core-infrastructure:
+    name: Provision core infrastructure resources
+    needs: propagate-github-env-vars
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
     with:
       action: apply
-      environment: ${{vars.INFRA_ENVIRONMENT}}
-      iac_version: v0.0.17
+      repo_owner: keeonline
+      repo_name: infra-01-aws
+      work_dir: terraform/core
+      environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
+      iac_ref: v0.0.17
     secrets: inherit
     permissions:
       contents: write
       id-token: write
 
-
+  destroy-core-infrastructure:
+    name: Destroy core infrastructure resources
+    needs: [propagate-github-env-vars,provision-core-infrastructure]
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
+    with:
+      action: destroy
+      repo_owner: keeonline
+      repo_name: infra-01-aws
+      work_dir: terraform/core
+      environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
+      iac_ref: v0.0.17
+    secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
+        

@@ -18,7 +18,7 @@ jobs:
       - name: toJson
         id: toJson
         run: |
-          echo "value=${{ toJson(vars) }}" >> GITHUB_OUTPUT 
+          echo "value=${{ toJson(vars) }}" >> $GITHUB_OUTPUT 
       - name: fromJson
         id: fromJson
         run: |

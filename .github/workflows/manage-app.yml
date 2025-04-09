@@ -15,10 +15,15 @@ jobs:
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     steps:
-      - name: Show it!!!
+      - name: toJson
+        id: toJson
         run: |
-          echo "${{ toJson(vars) }}" 
-
+          echo "value=${{ toJson(vars) }}" >> GITHUB_OUTPUT 
+      - name: fromJson
+        id: fromJson
+        run: |
+          echo "${{ steps.toJson.outputs.value }}
+  
   # propagate-github-env-vars:
   #   name: Propagate GitHub Environment variables
   #   runs-on: ubuntu-24.04

@@ -25,7 +25,7 @@ jobs:
   provision-core-infrastructure:
     name: Provision core infrastructure resources
     needs: propagate-github-env-vars
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@dev-reuse
+    uses: keeonline/github-workflows/.github/workflows/terraform.yml@dev-reuse
     with:
       action: apply
       repo_owner: keeonline

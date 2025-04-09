@@ -30,7 +30,7 @@ jobs:
       action: apply
       repo_owner: keeonline
       repo_name: infra-01-aws
-      workdir: terraform/core
+      work_dir: terraform/core
       environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
       iac_ref: v0.0.17
     secrets: inherit
@@ -46,7 +46,7 @@ jobs:
       action: destroy
       repo_owner: keeonline
       repo_name: infra-01-aws
-      workdir: terraform/core
+      work_dir: terraform/core
       environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
       iac_ref: v0.0.17
     secrets: inherit

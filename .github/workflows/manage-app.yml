@@ -11,7 +11,7 @@ on:
 
 jobs:
   propagate-github-env-vars:
-    name: Propogate GitHub Environment variables
+    name: Propagate GitHub Environment variables
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     outputs:
@@ -25,7 +25,7 @@ jobs:
   provision-core-infrastructure:
     name: Provision core infrastructure resources
     needs: propagate-github-env-vars
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev-reuse
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
     with:
       action: apply
       repo_owner: keeonline
@@ -41,7 +41,7 @@ jobs:
   destroy-core-infrastructure:
     name: Destroy core infrastructure resources
     needs: [propagate-github-env-vars,provision-core-infrastructure]
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev-reuse
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
     with:
       action: destroy
       repo_owner: keeonline

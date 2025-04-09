@@ -25,7 +25,7 @@ jobs:
   provision-core-infrastructure:
     name: Provision core infrastructure resources
     needs: propagate-github-env-vars
-    uses: keeonline/github-workflows/.github/workflows/terraform.yml@dev-reuse
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev-reuse
     with:
       action: apply
       repo_owner: keeonline
@@ -41,7 +41,7 @@ jobs:
   destroy-core-infrastructure:
     name: Destroy core infrastructure resources
     needs: [propagate-github-env-vars,provision-core-infrastructure]
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@dev-reuse
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev-reuse
     with:
       action: destroy
       repo_owner: keeonline

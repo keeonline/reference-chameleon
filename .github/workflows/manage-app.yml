@@ -35,6 +35,9 @@ jobs:
           work_dir: terraform/core
           environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
           iac_ref: v0.0.19
+    permissions:
+      contents: write
+      id-token: write
 
 
   

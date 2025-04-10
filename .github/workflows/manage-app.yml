@@ -10,7 +10,7 @@ on:
         default: test  
       
 jobs:
-  manage-infrastructure:
+  manage-application:
     name: Manage infratstructure (apply)
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
@@ -23,14 +23,27 @@ jobs:
       contents: write
       id-token: write
     steps:
+      
       - name: Provision cloud infrastructure
         uses: keeonline/github-actions/show@main
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
-          action: apply-plan
+          action: apply
           repo_name: infra-01-aws
           repo_ref: dev
           terraform_codedir: terraform/core
           environment: test
-
+      
+      - name: Destroy cloud infrastructure
+        uses: keeonline/github-actions/show@main
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: destroy
+          repo_name: infra-01-aws
+          repo_ref: dev
+          terraform_codedir: terraform/core
+          environment: test
+  
+  

@@ -15,10 +15,10 @@ jobs:
     name: Show
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    env:
-      TF_VAR_environment: ${{inputs.environment}}
-      TF_VAR_iac_version: v-carlos-fandango
-      TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
+    # env:
+    #   TF_VAR_environment: ${{inputs.environment}}
+    #   TF_VAR_iac_version: v-carlos-fandango
+    #   TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
     permissions:
       contents: write
       id-token: write

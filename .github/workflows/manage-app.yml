@@ -17,7 +17,7 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_app_version: ${{github.ref_name}}
-      TF_VAR_infra_environment: test
+      TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
       TF_VAR_infra_version: v0.0.20
     permissions:
       contents: write
@@ -33,7 +33,7 @@ jobs:
           repo_name: infra-01-aws
           repo_ref: v0.0.20
           terraform_codedir: terraform/core
-          environment: test
+          environment: ${{vars.INFRA_ENVIRONMENT}}
 
 
 # !!!!!!!!!!!!!!!!!!!!!! SIT TEST EXECUTION WILL BE ADDED HERE !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,6 +66,6 @@ jobs:
           repo_name: infra-01-aws
           repo_ref: v0.0.20
           terraform_codedir: terraform/core
-          environment: test
+          environment: ${{vars.INFRA_ENVIRONMENT}}
   
   

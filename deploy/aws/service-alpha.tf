@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "alpha" {
   container_definitions = jsonencode([
     {
       name  = "${var.app_environment}-task-alpha"
-      image = "docker.io/keeonline/chameleon:${var.iac_version}"
+      image = "docker.io/keeonline/chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "alpha" },
       ]
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "alpha" {
     Name        = "${var.app_environment}-task-alpha"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "alpha" {
     Name        = "${var.app_environment}-tg-alpha"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_lb_listener_rule" "alpha" {
     Name        = "${var.app_environment}-alb-listener-rule-alpha"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -107,6 +107,6 @@ resource "aws_ecs_service" "alpha" {
     Name        = "${var.app_environment}-ecs-service-alpha"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }

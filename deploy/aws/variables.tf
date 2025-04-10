@@ -1,11 +1,11 @@
-variable "infra_environment" {
-  type = string
-}
-
 variable "app_environment" {
   type = string
 }
 
-variable "iac_version" {
+variable "app_version" {
+  type = string
+}
+
+variable "infra_environment" {
   type = string
 }

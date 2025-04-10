@@ -16,19 +16,20 @@ jobs:
     environment: ${{inputs.environment}}
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
-      TF_VAR_iac_version: ${{github.ref_name}}
+      TF_VAR_app_version: ${{github.ref_name}}
       TF_VAR_infra_envrionment: dev
     permissions:
       contents: write
       id-token: write
     steps:
-      - name: terraform apply infrastructure IaC
+      - name: Provision cloud infrastructure
         uses: keeonline/github-actions/show@main
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
           action: apply
           repo_name: infra-01-aws
+          repo_ref: dev
           terraform_codedir: terraform/core
-          environment: dev
+          environment: test
 

@@ -25,7 +25,7 @@ jobs:
     steps:
       
       - name: Provision cloud infrastructure
-        uses: keeonline/github-actions/show@main
+        uses: keeonline/github-actions/terraform-action@v0.0.1
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
@@ -36,7 +36,7 @@ jobs:
           environment: test
       
       - name: Deploy application
-        uses: keeonline/github-actions/show@main
+        uses: keeonline/github-actions/terraform-action@v0.0.1
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
@@ -45,7 +45,7 @@ jobs:
           environment: test
           
       - name: Undeploy application
-        uses: keeonline/github-actions/show@main
+        uses: keeonline/github-actions/terraform-action@v0.0.1
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
@@ -54,7 +54,7 @@ jobs:
           environment: test
             
       - name: Destroy cloud infrastructure
-        uses: keeonline/github-actions/show@main
+        uses: keeonline/github-actions/terraform-action@v0.0.1
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}

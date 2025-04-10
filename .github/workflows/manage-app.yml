@@ -13,18 +13,19 @@ jobs:
 
   show: 
     name: Show
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev
-    with:
-      action: apply
-      repo_owner: keeonline
-      repo_name: infra-01-aws
-      work_dir: terraform/core
-      environment: ${{inputs.environment}}
-      iac_ref: v0.0.17
-    secrets: inherit
-  #   permissions:
-  #     contents: write
-  #     id-token: write
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    env:
+      TF_VAR_environment: ${{inputs.environment}}
+      TF_VAR_iac_version: v-carlos-fandango
+      TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
+    steps:
+      - name: show
+        run: |
+          echo "TF_VAR_infra_environment=${TF_VAR_infra_environment}"
+
+      - name: show with action
+        uses: keeonline/github-workflows/.github/actions/show.yml@main
   
   # propagate-github-env-vars:
   #   name: Propagate GitHub Environment variables

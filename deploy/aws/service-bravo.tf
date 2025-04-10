@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "bravo" {
   container_definitions = jsonencode([
     {
       name  = "${var.app_environment}-task-bravo"
-      image = "docker.io/keeonline/chameleon:${var.iac_version}"
+      image = "docker.io/keeonline/chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "bravo" },
       ]
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "bravo" {
     Name        = "${var.app_environment}-task-bravo"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "bravo" {
     Name        = "${var.app_environment}-tg-bravo"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 
 }
@@ -81,7 +81,7 @@ resource "aws_lb_listener_rule" "bravo" {
     Name        = "${var.app_environment}-alb-listener-rule-bravo"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -108,6 +108,6 @@ resource "aws_ecs_service" "bravo" {
     Name        = "${var.app_environment}-ecs-service-bravo"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }

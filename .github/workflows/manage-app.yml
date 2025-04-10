@@ -8,49 +8,60 @@ on:
         description: The application environment name
         required: false
         default: test  
-
+      
 jobs:
-  propagate-github-env-vars:
-    name: Propagate GitHub Environment variables
+  manage-application:
+    name: Manage infratstructure (apply)
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    outputs:
-      infra_environment: ${{ steps.infenv.outputs.value }}
+    env:
+      TF_VAR_app_environment: ${{inputs.environment}}
+      TF_VAR_app_version: ${{github.ref_name}}
+      TF_VAR_infra_environment: test
+      TF_VAR_infra_version: dev
+    permissions:
+      contents: write
+      id-token: write
     steps:
-      - name: Get infrastructure environment name
-        id: infenv
-        run: |
-          echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT    
-
-  provision-core-infrastructure:
-    name: Provision core infrastructure resources
-    needs: propagate-github-env-vars
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
-    with:
-      action: apply
-      repo_owner: keeonline
-      repo_name: infra-01-aws
-      work_dir: terraform/core
-      environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
-      iac_ref: v0.0.17
-    secrets: inherit
-    permissions:
-      contents: write
-      id-token: write
-
-  destroy-core-infrastructure:
-    name: Destroy core infrastructure resources
-    needs: [propagate-github-env-vars,provision-core-infrastructure]
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
-    with:
-      action: destroy
-      repo_owner: keeonline
-      repo_name: infra-01-aws
-      work_dir: terraform/core
-      environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
-      iac_ref: v0.0.17
-    secrets: inherit
-    permissions:
-      contents: write
-      id-token: write
-        
+      
+      - name: Provision cloud infrastructure
+        uses: keeonline/github-actions/terraform-action@v0.0.1
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: apply
+          repo_name: infra-01-aws
+          repo_ref: dev
+          terraform_codedir: terraform/core
+          environment: test
+      
+      - name: Deploy application
+        uses: keeonline/github-actions/terraform-action@v0.0.1
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: apply
+          terraform_codedir: deploy/aws
+          environment: test
+          
+      - name: Undeploy application
+        uses: keeonline/github-actions/terraform-action@v0.0.1
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: destroy
+          terraform_codedir: deploy/aws
+          environment: test
+            
+      - name: Destroy cloud infrastructure
+        uses: keeonline/github-actions/terraform-action@v0.0.1
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: destroy
+          repo_name: infra-01-aws
+          repo_ref: dev
+          terraform_codedir: terraform/core
+          environment: test
+  
+  

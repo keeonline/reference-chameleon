@@ -33,7 +33,9 @@ jobs:
         - name: Get branch version
           id: version
           run: |
-            echo "value=${{github.ref_name}}-latest" >> $GITHUB_OUTPUT
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+
+# echo "value=${{github.ref_name}}-latest" >> $GITHUB_OUTPUT
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon

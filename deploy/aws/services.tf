@@ -8,7 +8,7 @@ resource "aws_security_group" "service" {
     Name        = "${var.app_environment}-sg-service"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_vpc_security_group_ingress_rule" "api_requests" {
     Name        = "${var.app_environment}-sg-ingress-rule-service-traffic-${count.index}"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -44,7 +44,7 @@ resource "aws_vpc_security_group_ingress_rule" "service_management" {
     Name        = "${var.app_environment}-sg-ingress-rule-service-management-${count.index}"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }
 
@@ -57,6 +57,6 @@ resource "aws_vpc_security_group_egress_rule" "service" {
     Name        = "${var.app_environment}-sg-egress-rule-service"
     Environment = "${var.app_environment}"
     Category    = "application"
-    Version     = "${var.iac_version}"
+    Version     = "${var.app_version}"
   }
 }

@@ -19,25 +19,25 @@ jobs:
       TF_VAR_environment: ${{inputs.environment}}
       TF_VAR_iac_version: v-carlos-fandango
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-    steps:
-      - name: show
-        run: |
-          echo "TF_VAR_infra_environment=${TF_VAR_infra_environment}"
-
-      - name: terraform action
-        uses: keeonline/github-actions/show@main
-        with:
-          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
-          aws_region: ${{secrets.AWS_REGION}}
-          action: plan-apply
-          repo_owner: keeonline
-          repo_name: infra-01-aws
-          work_dir: terraform/core
-          environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
-          iac_ref: v0.0.19
     permissions:
       contents: write
       id-token: write
+    steps:
+    - name: show
+      run: |
+        echo "TF_VAR_infra_environment=${TF_VAR_infra_environment}"
+
+    - name: terraform action
+      uses: keeonline/github-actions/show@main
+      with:
+        aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+        aws_region: ${{secrets.AWS_REGION}}
+        action: plan-apply
+        repo_owner: keeonline
+        repo_name: infra-01-aws
+        work_dir: terraform/core
+        environment: ${{needs.propagate-github-env-vars.outputs.infra_environment}}
+        iac_ref: v0.0.19
 
 
   

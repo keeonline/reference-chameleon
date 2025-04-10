@@ -17,7 +17,8 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_app_version: ${{github.ref_name}}
-      TF_VAR_infra_envrionment: dev
+      TF_VAR_infra_environment: test
+      TF_VAR_infra_version: dev
     permissions:
       contents: write
       id-token: write

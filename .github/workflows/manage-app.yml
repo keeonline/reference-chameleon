@@ -18,7 +18,7 @@ jobs:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_app_version: ${{github.ref_name}}
       TF_VAR_infra_environment: test
-      TF_VAR_infra_version: dev
+      TF_VAR_infra_version: v0.0.20
     permissions:
       contents: write
       id-token: write
@@ -31,9 +31,13 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: apply
           repo_name: infra-01-aws
-          repo_ref: dev
+          repo_ref: v0.0.20
           terraform_codedir: terraform/core
           environment: test
+
+
+# !!!!!!!!!!!!!!!!!!!!!! SIT TEST EXECUTION WILL BE ADDED HERE !!!!!!!!!!!!!!!!!!!!!!!!!
+
       
       - name: Deploy application
         uses: keeonline/github-actions/terraform-action@v0.0.1
@@ -60,7 +64,7 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: destroy
           repo_name: infra-01-aws
-          repo_ref: dev
+          repo_ref: v0.0.20
           terraform_codedir: terraform/core
           environment: test
   

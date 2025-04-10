@@ -35,12 +35,30 @@ jobs:
           terraform_codedir: terraform/core
           environment: test
       
+      - name: Deploy application
+        uses: keeonline/github-actions/show@main
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: apply
+          terraform_codedir: deploy/aws
+          environment: test
+          
+      - name: Undeploy application
+        uses: keeonline/github-actions/show@main
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{secrets.AWS_REGION}}
+          action: plan-destroy
+          terraform_codedir: deploy/aws
+          environment: test
+            
       - name: Destroy cloud infrastructure
         uses: keeonline/github-actions/show@main
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
-          action: destroy
+          action: plan-destroy
           repo_name: infra-01-aws
           repo_ref: dev
           terraform_codedir: terraform/core

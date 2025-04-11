@@ -36,9 +36,6 @@ jobs:
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
 
-# !!!!!!!!!!!!!!!!!!!!!! SIT TEST EXECUTION WILL BE ADDED HERE !!!!!!!!!!!!!!!!!!!!!!!!!
-
-      
       - name: Deploy application
         uses: keeonline/github-actions/terraform-action@v0.0.1
         with:
@@ -48,6 +45,10 @@ jobs:
           terraform_codedir: deploy/aws
           environment: test
           
+# !!!!!!!!!!!!!!!!!!!!!! SIT EXECUTION WILL BE ADDED HERE !!!!!!!!!!!!!!!!!!!!!!!!!
+# aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text
+
+      
       - name: Undeploy application
         uses: keeonline/github-actions/terraform-action@v0.0.1
         with:

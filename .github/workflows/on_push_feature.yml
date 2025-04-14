@@ -30,15 +30,12 @@ jobs:
         - name: Setup Gradle            
           uses: gradle/actions/setup-gradle@v4
 
-        - name: Get branch version
-          id: version
-          run: |
-            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
-
-# echo "value=${{github.ref_name}}-latest" >> $GITHUB_OUTPUT
+        - name: Get the application artefact version
+          id: app_version
+          uses: keeonline/github-actions/artefact-version-by-ref-type@v0.0.8
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.app_version.outputs.version}} build --no-daemon
 
         - name: Upload build reports
           uses: actions/upload-artifact@v4
@@ -47,7 +44,7 @@ jobs:
             path: build/reports
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
+          run: docker build --build-arg VERSION=${{steps.app_version.outputs.version}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.app_version.outputs.version}} .  
 
         # - name: Publish Test Report
         #   if: always()
@@ -138,7 +135,7 @@ jobs:
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.app_version.outputs.version}}
 
         - name: Stop and remove the containers   
           if: always()

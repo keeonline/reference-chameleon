@@ -85,6 +85,8 @@ resource "aws_lb_listener_rule" "alpha" {
 }
 
 resource "aws_ecs_service" "alpha" {
+  depends_on = [data.aws_subnets.private.ids]
+
   name            = "${var.app_environment}-ecs-service-alpha"
   cluster         = data.aws_ecs_cluster.applications.id
   task_definition = aws_ecs_task_definition.alpha.arn

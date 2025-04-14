@@ -17,7 +17,7 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-      TF_VAR_infra_version: v0.0.29
+      TF_VAR_infra_version: karate-latest
     permissions:
       contents: write
       id-token: write
@@ -40,7 +40,7 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: apply
           repo_name: infra-01-aws
-          repo_ref: v0.0.29
+          repo_ref: karate
           terraform_codedir: terraform/core
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
@@ -80,7 +80,7 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: destroy
           repo_name: infra-01-aws
-          repo_ref: v0.0.29
+          repo_ref: karate
           terraform_codedir: terraform/core
           environment: ${{vars.INFRA_ENVIRONMENT}}
   

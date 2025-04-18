@@ -88,7 +88,7 @@ jobs:
           working-directory: servicetest
           run: | 
             echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-            echo "VERSION=${steps.versions.outputs.branch}" >> .env
+            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
             cat .env          
     
         - name: Start the otel container

@@ -35,7 +35,7 @@ jobs:
           uses: keeonline/github-actions/artefact-version@feature-1
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.app_version.outputs.version}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.versionS.outputs.branch}} build --no-daemon
 
         - name: Upload build reports
           uses: actions/upload-artifact@v4
@@ -44,7 +44,7 @@ jobs:
             path: build/reports
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.app_version.outputs.version}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.app_version.outputs.version}} .  
+          run: docker build --build-arg VERSION=${{steps.versionS.outputs.branch}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versionS.outputs.branch}} .  
 
         # - name: Publish Test Report
         #   if: always()
@@ -88,7 +88,7 @@ jobs:
           working-directory: servicetest
           run: | 
             echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-            echo "ARTEFACT_VERSION=${steps.versions.outputs.branch}" >> .env
+            echo "VERSION=${steps.versions.outputs.branch}" >> .env
             cat .env          
     
         - name: Start the otel container

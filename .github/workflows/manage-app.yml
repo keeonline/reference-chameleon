@@ -17,7 +17,7 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-      TF_VAR_infra_version: feature-latest
+      TF_VAR_infra_version: v0.0.31
     permissions:
       contents: write
       id-token: write
@@ -30,7 +30,7 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: apply
           repo_name: infra-01-aws
-          repo_ref: feature
+          repo_ref: v0.0.31
           terraform_codedir: terraform/core
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
@@ -73,6 +73,6 @@ jobs:
           aws_region: ${{secrets.AWS_REGION}}
           action: destroy
           repo_name: infra-01-aws
-          repo_ref: feature
+          repo_ref: v0.0.31
           terraform_codedir: terraform/core
           environment: ${{vars.INFRA_ENVIRONMENT}}

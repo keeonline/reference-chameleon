@@ -25,14 +25,14 @@ jobs:
       
       - name: Get the application version
         id: app_version
-        uses: keeonline/github-actions/artefact-version-by-ref-type@v0.0.8
+        uses: keeonline/github-actions/artefact-version-by-ref-type@feature-1
 
       - name: show
         run: |
           echo "infra_version=${{steps.app_version.outputs.version}}"
 
       - name: Provision cloud infrastructure
-        uses: keeonline/github-actions/terraform-action@v0.0.8
+        uses: keeonline/github-actions/terraform-action@feature-1
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
@@ -46,7 +46,7 @@ jobs:
 
 
       - name: Deploy application
-        uses: keeonline/github-actions/terraform-action@v0.0.8
+        uses: keeonline/github-actions/terraform-action@feature-1
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
@@ -61,7 +61,7 @@ jobs:
 
       
       - name: Undeploy application
-        uses: keeonline/github-actions/terraform-action@v0.0.8
+        uses: keeonline/github-actions/terraform-action@feature-1
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
@@ -72,7 +72,7 @@ jobs:
           environment: test
             
       - name: Destroy cloud infrastructure
-        uses: keeonline/github-actions/terraform-action@v0.0.8
+        uses: keeonline/github-actions/terraform-action@feature-1
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:

@@ -77,9 +77,10 @@ jobs:
       - name: Execute the service tests using karate
         working-directory: sit/karate
         run: |
-          BASEURL=$(aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text)
-          echo "baseurl=${BASEURL}:18080"
-          java -Dbaseurl=${BASEURL}:18080 -jar /opt/karate.jar .
+          ALB=$(aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text)
+          BASEURL=http://${ALB}:18080
+          echo "baseurl=${BASEURL}"
+          java -Dbaseurl=${BASEURL} -jar /opt/karate.jar .
               
       - name: Upload service test reports
         uses: actions/upload-artifact@v4

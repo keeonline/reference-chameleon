@@ -13,7 +13,6 @@ Feature: Call the greetings endpoints of the chameleon based services
 
     Examples:
       | serviceName | greeting                   | 
-      | chameleon       | This is the chameleon service! |
       | alpha       | This is the alpha service! |
       | bravo       | This is the bravo service! |
 
@@ -28,11 +27,10 @@ Feature: Call the greetings endpoints of the chameleon based services
 
     Examples:
       | path           | 
-      | chameleon/like |
       | alpha/numerics |
       | bravo/bravo    |
 
-  Scenario: Call to a chameleon service that is not deployed
+  Scenario: Call to a service that is not deployed
     Given url baseUrl
     And path 'zulu/greetings'
     When method GET

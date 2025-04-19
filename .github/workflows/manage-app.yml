@@ -59,48 +59,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure credentials for AWS CLI usage
-        uses: aws-actions/configure-aws-credentials/@v4
-        with:
-          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
-          aws-region: ${{secrets.AWS_REGION}}
-
-      - name: Login to Docker registry
-        uses: docker/login-action@v3
-        with:
-            username: ${{ vars.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Install docker compose
-        run: |
-          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
-
-      - name: Create docker compose environment file
-        working-directory: servicetest
-        run: | 
-          echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-          if [ "${{github.ref_type}}" == "branch" ]
-          then
-            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
-          else
-            echo "VERSION=${{github.ref_name}}" >> .env
-          fi
-          cat .env          
-
-      - name: Start the otel container
-        working-directory: servicetest
-        run: |
-          docker-compose up -d otel
-          sleep 10
-          
-      - name: Start the chameleon container
-        working-directory: servicetest
-        run: |
-          docker-compose up -d chameleon
-          sleep 10
-
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -110,23 +68,24 @@ jobs:
         run: |
           wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
 
+      - name: Configure credentials for AWS CLI usage
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
+  
       - name: Execute the service tests using karate
-        working-directory: servicetest/karate
+        working-directory: sit/karate
         run: |
           BASEURL=$(aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text)
+          echo "baseurl=${BASEURL}:18080"
           java -Dbaseurl=${BASEURL}:18080 -jar /opt/karate.jar .
               
       - name: Upload service test reports
         uses: actions/upload-artifact@v4
         with:
           name: Service Test Reports
-          path: servicetest/karate/target/karate-reports
-
-      - name: Stop and remove the containers   
-        if: always()
-        working-directory: servicetest
-        run: |
-          docker-compose down     
+          path: sit/karate/target/karate-reports
 
 # !!!!! SIT EXECUTION END !!!!!
           

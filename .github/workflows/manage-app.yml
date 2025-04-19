@@ -59,6 +59,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure credentials for AWS CLI usage
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
+
       - name: Login to Docker registry
         uses: docker/login-action@v3
         with:

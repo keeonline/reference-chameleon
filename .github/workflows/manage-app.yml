@@ -48,11 +48,82 @@ jobs:
           action: apply
           terraform_codedir: deploy/aws
           environment: test
+
+# !!!!! SIT EXECUTION START !!!!!
           
 # !!!!!!!!!!!!!!!!!!!!!! SIT EXECUTION WILL BE ADDED HERE !!!!!!!!!!!!!!!!!!!!!!!!!
 # aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text
 
-      
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v3
+        with:
+            username: ${{ vars.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install docker compose
+        run: |
+          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Create docker compose environment file
+        working-directory: servicetest
+        run: | 
+          echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
+          if [ "${{github.ref_type}}" == "branch" ]
+          then
+            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
+          else
+            echo "VERSION=${{github.ref_name}}" >> .env
+          fi
+          cat .env          
+
+      - name: Start the otel container
+        working-directory: servicetest
+        run: |
+          docker-compose up -d otel
+          sleep 10
+          
+      - name: Start the chameleon container
+        working-directory: servicetest
+        run: |
+          docker-compose up -d chameleon
+          sleep 10
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '23'
+
+      - name: Download the standalone karate jar
+        run: |
+          wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
+
+      - name: Execute the service tests using karate
+        working-directory: servicetest/karate
+        run: |
+          BASEURL=$(aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text)
+          java -Dbaseurl=${BASEURL}:18080 -jar /opt/karate.jar .
+              
+      - name: Upload service test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: Service Test Reports
+          path: servicetest/karate/target/karate-reports
+
+      - name: Stop and remove the containers   
+        if: always()
+        working-directory: servicetest
+        run: |
+          docker-compose down     
+
+# !!!!! SIT EXECUTION END !!!!!
+          
       - name: Undeploy application
         uses: keeonline/github-actions/terraform-apply@v0.0.9
         env:

@@ -34,4 +34,5 @@ Feature: Call the greetings endpoints of the chameleon based services
     Given url baseUrl
     And path 'zulu/greetings'
     When method GET
-    Then status 404
+    Then status 503
+    * match response == 'The service you have requested is unavailable'

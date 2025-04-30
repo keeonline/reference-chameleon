@@ -5,7 +5,7 @@ Feature: Call the greetings endpoints of the chameleon based services
  
   Scenario Outline: Successful call to chameleon service variants
     Given url baseUrl
-    And path '<serviceName>/greetings'
+    And path '<serviceName>/v1/greetings'
     When method GET
     Then status 200
     * match response.serviceName == '<serviceName>'
@@ -32,7 +32,7 @@ Feature: Call the greetings endpoints of the chameleon based services
 
   Scenario: Call to a service that is not deployed
     Given url baseUrl
-    And path 'zulu/greetings'
+    And path 'zulu/v1/greetings'
     When method GET
     Then status 503
     * match response == 'The service you have requested is unavailable'

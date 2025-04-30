@@ -11,10 +11,10 @@ Feature: Call the greetings endpoints of the chameleon based services
     When method GET
     Then status 200
     * match response.serviceName == '<serviceName>'
-    * match response.greeting == '<greeting>'
+    * match response.message == '<message>'
 
     Examples:
-      | serviceName | greeting                   | 
+      | serviceName | message                   | 
       | alpha       | This is the alpha service! |
       | bravo       | This is the bravo service! |
 

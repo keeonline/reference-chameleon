@@ -26,7 +26,7 @@ Feature: Call the greetings endpoints of the chameleon service
     When method GET
     Then status 404
 
-    # Version 2 API tests
+# Version 2 API tests
 
   Scenario: Successful call to chameleon service
     Given url 'http://localhost:8080'

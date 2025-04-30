@@ -1,4 +1,4 @@
-package com.keeonline.chameleon.api.model;
+package com.keeonline.chameleon.api.v1.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,7 +9,7 @@ public class GreetingsDtoTest {
     @Test
     void shouldReturnCustomisedGreeting() {
         GreetingsDto dto = new GreetingsDto("carlos-fandango");
-        assertEquals("This is the carlos-fandango service!", dto.getGreeting());
+        assertEquals("This is the carlos-fandango service!", dto.getMessage());
     }
 
 }

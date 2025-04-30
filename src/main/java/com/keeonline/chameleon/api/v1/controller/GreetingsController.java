@@ -1,4 +1,4 @@
-package com.keeonline.chameleon.api.controller;
+package com.keeonline.chameleon.api.v1.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.keeonline.chameleon.api.model.GreetingsDto;
+import com.keeonline.chameleon.api.v1.model.GreetingsDto;
 
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @RestController
-@RequestMapping("/greetings")
+@RequestMapping("/v1/greetings")
 public class GreetingsController {
 
     @Value("${spring.application.name}")

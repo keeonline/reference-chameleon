@@ -1,4 +1,4 @@
-package com.keeonline.chameleon.api.controller;
+package com.keeonline.chameleon.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

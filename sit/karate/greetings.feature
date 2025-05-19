@@ -8,6 +8,7 @@ Feature: Call the greetings endpoints of the chameleon based services
   Scenario Outline: Successful call to chameleon service variants
     Given url baseUrl
     And path '<serviceName>/v1/greetings'
+    And retry until responseStatus == 200
     When method GET
     Then status 200
     * match response.serviceName == '<serviceName>'
@@ -47,6 +48,7 @@ Feature: Call the greetings endpoints of the chameleon based services
   Scenario Outline: Successful call to chameleon service variants
     Given url baseUrl
     And path '<serviceName>/v2/greetings'
+    And retry until responseStatus == 200
     When method GET
     Then status 200
     * match response.serviceName == '<serviceName>'

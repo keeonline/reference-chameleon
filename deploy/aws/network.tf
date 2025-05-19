@@ -13,7 +13,7 @@ data "aws_subnets" "public" {
   }
 
   filter {
-    name   = "tag:Visibiliy"
+    name   = "tag:Visibility"
     values = ["public"]
   }
 }
@@ -31,7 +31,7 @@ data "aws_subnets" "private" {
   }
 
   filter {
-    name   = "tag:Visibiliy"
+    name   = "tag:Visibility"
     values = ["private"]
   }
 }

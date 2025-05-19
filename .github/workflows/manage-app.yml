@@ -78,7 +78,7 @@ jobs:
         working-directory: sit/karate
         run: |
           ALB=$(aws elbv2 describe-load-balancers --names test-alb --query 'LoadBalancers[*].[DNSName]' --output text)
-          BASEURL=http://${ALB}:18080
+          BASEURL=http://${ALB}:80
           echo "baseurl=${BASEURL}"
           java -Dbaseurl=${BASEURL} -jar /opt/karate.jar .
               

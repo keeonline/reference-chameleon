@@ -31,7 +31,7 @@ jobs:
           action: apply
           repo_name: infra-01-aws
           repo_ref: v0.0.33
-          terraform_codedir: terraform/core
+          terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
       - name: Get the application version
@@ -111,5 +111,5 @@ jobs:
           action: destroy
           repo_name: infra-01-aws
           repo_ref: v0.0.33
-          terraform_codedir: terraform/core
+          terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}

@@ -91,11 +91,11 @@ jobs:
             echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
             cat .env          
     
-        - name: Start the otel container
-          working-directory: servicetest
-          run: |
-            docker-compose up -d otel
-            sleep 10
+        # - name: Start the otel container
+        #   working-directory: servicetest
+        #   run: |
+        #     docker-compose up -d otel
+        #     sleep 10
               
         - name: Start the chameleon container
           working-directory: servicetest

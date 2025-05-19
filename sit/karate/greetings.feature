@@ -1,6 +1,6 @@
 Feature: Call the greetings endpoints of the chameleon based services
 
-# Version 1 API tests
+    # Version 1 API tests
 
   Scenario: using karate-config
     * print baseUrl
@@ -15,7 +15,7 @@ Feature: Call the greetings endpoints of the chameleon based services
     * match response.message == '<message>'
 
     Examples:
-      | serviceName | message                   | 
+      | serviceName | message                    | 
       | alpha       | This is the alpha service! |
       | bravo       | This is the bravo service! |
 
@@ -40,7 +40,7 @@ Feature: Call the greetings endpoints of the chameleon based services
     Then status 503
     * match response == 'The service you have requested is unavailable'
 
-# Version 2 API tests
+    # Version 2 API tests
 
   Scenario: using karate-config
     * print baseUrl

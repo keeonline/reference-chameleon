@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.keeonline.chameleon.api.v1.model.GreetingsDto;
 
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
+// import io.opentelemetry.api.trace.Span;
+// import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @RestController("GreetingsV1")
 @RequestMapping("/v1/greetings")

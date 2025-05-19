@@ -19,13 +19,13 @@ public class GreetingsController {
     private String serviceName;
 
     @GetMapping(path = "")
-    @WithSpan(value = "/v2/greetings")
+    // @WithSpan(value = "/v2/greetings")
     public ResponseEntity<GreetingsDto> get() {
 
         GreetingsDto dto = new GreetingsDto(serviceName);
 
-        Span span = Span.current();
-        span.setAttribute("application.request_id", dto.getRequestId());
+        // Span span = Span.current();
+        // span.setAttribute("application.request_id", dto.getRequestId());
 
         return ResponseEntity.ok().body(dto);
     }

@@ -44,7 +44,7 @@ resource "aws_lb_target_group" "bravo" {
   target_type          = "ip"
 
   health_check {
-    healthy_threshold   = 1
+    healthy_threshold   = 2
     unhealthy_threshold = 3
     interval            = 10
     matcher             = "200"

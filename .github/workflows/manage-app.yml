@@ -74,14 +74,10 @@ jobs:
           role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
           aws-region: ${{vars.AWS_REGION}}
 
-      - name: Check the alpha service state
+      - name: Ensure the services are stable before executing tests
         run: |
-          aws ecs describe-services --cluster test-ecs-cluster-applications --services test-ecs-service-alpha
+          aws ecs wait services-stable --cluster test-ecs-cluster-applications --services test-ecs-service-alpha test-ecs-service-bravo
     
-      - name: Check the bravo service state
-        run: |
-          aws ecs describe-services --cluster test-ecs-cluster-applications --services test-ecs-service-bravo
-      
       - name: Execute the service tests using karate
         working-directory: sit/karate
         run: |

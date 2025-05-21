@@ -105,15 +105,15 @@ jobs:
           terraform_codedir: deploy/aws
           environment: test
             
-      # - name: Destroy cloud infrastructure
-      #   uses: keeonline/github-actions/terraform-apply@v0.0.9
-      #   env:
-      #     TF_VAR_app_version: ${{steps.app_version.outputs.version}}
-      #   with:
-      #     aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
-      #     aws_region: ${{vars.AWS_REGION}}
-      #     action: destroy
-      #     repo_name: infra-01-aws
-      #     repo_ref: v0.0.33
-      #     terraform_codedir: terraform
-      #     environment: ${{vars.INFRA_ENVIRONMENT}}
+      - name: Destroy cloud infrastructure
+        uses: keeonline/github-actions/terraform-apply@v0.0.9
+        env:
+          TF_VAR_app_version: ${{steps.app_version.outputs.version}}
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{vars.AWS_REGION}}
+          action: destroy
+          repo_name: infra-01-aws
+          repo_ref: v0.0.33
+          terraform_codedir: terraform
+          environment: ${{vars.INFRA_ENVIRONMENT}}

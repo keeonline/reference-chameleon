@@ -44,9 +44,9 @@ resource "aws_lb_target_group" "alpha" {
   target_type          = "ip"
 
   health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    interval            = 30
+    healthy_threshold   = 1
+    unhealthy_threshold = 3
+    interval            = 10
     matcher             = "200"
     path                = "/alpha/actuator/health"
     port                = 9080

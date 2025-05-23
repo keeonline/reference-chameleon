@@ -39,7 +39,7 @@ jobs:
           echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
           if [ "${{github.ref_type}}" == "branch" ]
           then
-            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
+            echo "VERSION=${{steps.versions.outputs.branch_semantic}}" >> .env
           else
             echo "VERSION=${{github.ref_name}}" >> .env
           fi

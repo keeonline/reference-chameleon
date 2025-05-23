@@ -41,7 +41,7 @@ jobs:
       - name: Deploy application
         uses: keeonline/github-actions/terraform-apply@karate
         env:
-          TF_VAR_app_version: ${{steps.versions.outputs.branch}}
+          TF_VAR_app_version: ${{steps.versions.outputs.branch_semantic}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
@@ -97,7 +97,7 @@ jobs:
       - name: Undeploy application
         uses: keeonline/github-actions/terraform-apply@karate
         env:
-          TF_VAR_app_version: ${{steps.versions.outputs.branch}}
+          TF_VAR_app_version: ${{steps.versions.outputs.branch_semantic}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}

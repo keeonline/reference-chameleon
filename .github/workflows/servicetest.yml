@@ -31,7 +31,7 @@ jobs:
 
       - name: Get the application artefact version
         id: versions
-        uses: keeonline/github-actions/artefact-version@v0.0.9
+        uses: keeonline/github-actions/artefact-version@karate
 
       - name: Create docker compose environment file
         working-directory: servicetest

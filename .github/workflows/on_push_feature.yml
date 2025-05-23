@@ -32,10 +32,10 @@ jobs:
 
         - name: Get the application artefact version
           id: versions
-          uses: keeonline/github-actions/artefact-version@v0.0.9
+          uses: keeonline/github-actions/artefact-version@karate
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.versions.outputs.branch}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.versions.outputs.branch_semantic}} build --no-daemon
 
         - name: Upload build reports
           uses: actions/upload-artifact@v4
@@ -44,7 +44,7 @@ jobs:
             path: build/reports
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.versions.outputs.branch}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}} .  
+          run: docker build --build-arg VERSION=${{steps.versions.outputs.branch_semantic}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch_semantic}} .  
 
         # - name: Publish Test Report
         #   if: always()
@@ -88,7 +88,7 @@ jobs:
           working-directory: servicetest
           run: | 
             echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
+            echo "VERSION=${{steps.versions.outputs.branch_semantic}}" >> .env
             cat .env          
     
         # - name: Start the otel container
@@ -135,7 +135,7 @@ jobs:
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch_semantic}}
 
         - name: Stop and remove the containers   
           if: always()

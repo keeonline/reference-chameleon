@@ -1,13 +1,13 @@
 services:
 
-  otel:
-    image: otel/opentelemetry-collector-contrib:0.120.0
+  # otel:
+  #   image: otel/opentelemetry-collector-contrib:0.120.0
 
   chameleon:
-    image: ${DOCKERHUB_USERNAME}/chameleon:${BRANCH_NAME}-latest
+    image: ${DOCKERHUB_USERNAME}/chameleon:${VERSION}
     ports: 
-      - 18080:8080
-      - 19080:9080
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4318
+      - 8080:8080
+      - 9080:9080
+    # environment:
+    #   - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4318
     

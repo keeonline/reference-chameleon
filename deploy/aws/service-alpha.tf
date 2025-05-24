@@ -45,8 +45,8 @@ resource "aws_lb_target_group" "alpha" {
 
   health_check {
     healthy_threshold   = 2
-    unhealthy_threshold = 2
-    interval            = 30
+    unhealthy_threshold = 3
+    interval            = 10
     matcher             = "200"
     path                = "/alpha/actuator/health"
     port                = 9080
@@ -85,6 +85,8 @@ resource "aws_lb_listener_rule" "alpha" {
 }
 
 resource "aws_ecs_service" "alpha" {
+  depends_on = [data.aws_subnets.private]
+
   name            = "${var.app_environment}-ecs-service-alpha"
   cluster         = data.aws_ecs_cluster.applications.id
   task_definition = aws_ecs_task_definition.alpha.arn

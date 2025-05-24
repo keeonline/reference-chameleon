@@ -1,4 +1,4 @@
-package com.keeonline.chameleon.api.controller;
+package com.keeonline.chameleon.api.v2.controller;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ public class GreetingsControllerTest {
 
     @Test
     void shouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/greetings")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/v2/greetings")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("This is the chameleon service!")));
     }
 }

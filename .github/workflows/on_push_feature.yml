@@ -30,15 +30,12 @@ jobs:
         - name: Setup Gradle            
           uses: gradle/actions/setup-gradle@v4
 
-        - name: Get branch version
-          id: version
-          run: |
-            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
-
-# echo "value=${{github.ref_name}}-latest" >> $GITHUB_OUTPUT
+        - name: Get the application artefact version
+          id: versions
+          uses: keeonline/github-actions/artefact-version@v0.0.10
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.versions.outputs.branch_semantic}} build --no-daemon
 
         - name: Upload build reports
           uses: actions/upload-artifact@v4
@@ -47,7 +44,7 @@ jobs:
             path: build/reports
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.version.outputs.value}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}} .  
+          run: docker build --build-arg VERSION=${{steps.versions.outputs.branch_semantic}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch_semantic}} .  
 
         # - name: Publish Test Report
         #   if: always()
@@ -91,14 +88,14 @@ jobs:
           working-directory: servicetest
           run: | 
             echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-            echo "BRANCH_NAME=${{github.ref_name}}" >> .env
+            echo "VERSION=${{steps.versions.outputs.branch_semantic}}" >> .env
             cat .env          
     
-        - name: Start the otel container
-          working-directory: servicetest
-          run: |
-            docker-compose up -d otel
-            sleep 10
+        # - name: Start the otel container
+        #   working-directory: servicetest
+        #   run: |
+        #     docker-compose up -d otel
+        #     sleep 10
               
         - name: Start the chameleon container
           working-directory: servicetest
@@ -138,7 +135,7 @@ jobs:
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch_semantic}}
 
         - name: Stop and remove the containers   
           if: always()

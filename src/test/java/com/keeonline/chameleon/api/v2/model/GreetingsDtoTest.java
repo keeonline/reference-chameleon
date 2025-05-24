@@ -1,4 +1,4 @@
-package com.keeonline.chameleon.api.model;
+package com.keeonline.chameleon.api.v2.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

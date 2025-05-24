@@ -4,5 +4,5 @@ data "aws_lb" "alb" {
 
 data "aws_lb_listener" "api_requests" {
   load_balancer_arn = data.aws_lb.alb.arn
-  port              = 18080
+  port              = 80
 }

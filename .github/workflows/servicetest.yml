@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
 
-      - name: Chekout source code
+      - name: Checkout source code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -29,18 +29,27 @@ jobs:
           chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
+      - name: Get the application artefact version
+        id: versions
+        uses: keeonline/github-actions/artefact-version@v0.0.10
+
       - name: Create docker compose environment file
         working-directory: servicetest
         run: | 
           echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
-          echo "BRANCH_NAME=${{github.ref_name}}" >> .env
+          if [ "${{github.ref_type}}" == "branch" ]
+          then
+            echo "VERSION=${{steps.versions.outputs.branch_semantic}}" >> .env
+          else
+            echo "VERSION=${{github.ref_name}}" >> .env
+          fi
           cat .env          
 
-      - name: Start the otel container
-        working-directory: servicetest
-        run: |
-          docker-compose up -d otel
-          sleep 10
+      # - name: Start the otel container
+      #   working-directory: servicetest
+      #   run: |
+      #     docker-compose up -d otel
+      #     sleep 10
           
       - name: Start the chameleon container
         working-directory: servicetest
@@ -73,10 +82,10 @@ jobs:
           docker container logs servicetest-chameleon-1
           sleep 10
   
-      - name: Otel log
-        run: |
-          docker container logs servicetest-otel-1
-          sleep 10
+      # - name: Otel log
+      #   run: |
+      #     docker container logs servicetest-otel-1
+      #     sleep 10
     
       - name: Stop and remove the containers   
         if: always()

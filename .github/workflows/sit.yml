@@ -38,10 +38,27 @@ jobs:
         id: versions
         uses: keeonline/github-actions/artefact-version@v0.0.10
           
+      - name: show versions
+        run: |
+          echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
+          echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
+
+      - name: Set the infra version
+        id: app_version
+        shell: bash
+        run: |
+          if [ "${{ github.ref_type }}" == "branch" ]
+          then
+            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
+          else
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy application
         uses: keeonline/github-actions/terraform-apply@v0.0.10
         env:
-          TF_VAR_app_version: ${{steps.versions.outputs.branch_semantic}}
+          TF_VAR_app_version: ${{steps.app_version.outputs.value}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
@@ -86,7 +103,7 @@ jobs:
       - name: Undeploy application
         uses: keeonline/github-actions/terraform-apply@v0.0.10
         env:
-          TF_VAR_app_version: ${{steps.versions.outputs.branch_semantic}}
+          TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}

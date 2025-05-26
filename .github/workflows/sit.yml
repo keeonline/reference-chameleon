@@ -17,43 +17,44 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
+      TF_VAR_vpc_cidr: 10.255.0.0/16
       TF_VAR_infra_version: v0.0.39
     permissions:
       contents: write
       id-token: write
     steps:
       
-      # - name: Provision cloud infrastructure
-      #   uses: keeonline/github-actions/terraform-apply@v0.0.10
-      #   with:
-      #     aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
-      #     aws_region: ${{vars.AWS_REGION}}
-      #     action: apply
-      #     repo_name: devops-demystified-fundamentals-infra-aws
-      #     repo_ref: v0.0.39
-      #     terraform_codedir: terraform
-      #     environment: ${{vars.INFRA_ENVIRONMENT}}
+      - name: Provision cloud infrastructure
+        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{vars.AWS_REGION}}
+          action: apply
+          repo_name: devops-demystified-fundamentals-infra-aws
+          repo_ref: v0.0.39
+          terraform_codedir: terraform
+          environment: ${{vars.INFRA_ENVIRONMENT}}
 
-      # - name: Get the application version
-      #   id: versions
-      #   uses: keeonline/github-actions/artefact-version@v0.0.10
+      - name: Get the application version
+        id: versions
+        uses: keeonline/github-actions/artefact-version@v0.0.10
           
-      # - name: show versions
-      #   run: |
-      #     echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
-      #     echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
-      #     echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
+      - name: show versions
+        run: |
+          echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
+          echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
 
-      # - name: Set the application version
-      #   id: app_version
-      #   shell: bash
-      #   run: |
-      #     if [ "${{ github.ref_type }}" == "branch" ]
-      #     then
-      #       echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
-      #     fi
+      - name: Set the application version
+        id: app_version
+        shell: bash
+        run: |
+          if [ "${{ github.ref_type }}" == "branch" ]
+          then
+            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
+          else
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+          fi
 
       # - name: Deploy application
       #   uses: keeonline/github-actions/terraform-apply@v0.0.10

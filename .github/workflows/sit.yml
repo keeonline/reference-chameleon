@@ -17,7 +17,7 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-      TF_VAR_infra_version: v0.0.34
+      TF_VAR_infra_version: v0.0.36
     permissions:
       contents: write
       id-token: write
@@ -30,7 +30,7 @@ jobs:
           aws_region: ${{vars.AWS_REGION}}
           action: apply
           repo_name: devops-demystified-fundamentals-infra-aws
-          repo_ref: v0.0.34
+          repo_ref: v0.0.36
           terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
@@ -120,6 +120,6 @@ jobs:
           aws_region: ${{vars.AWS_REGION}}
           action: destroy
           repo_name: devops-demystified-fundamentals-infra-aws
-          repo_ref: v0.0.34
+          repo_ref: v0.0.36
           terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}

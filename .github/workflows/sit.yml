@@ -10,7 +10,7 @@ on:
         default: test  
       
 jobs:
-  manage-application:
+  execute-sit:
     name: Manage infratstructure (apply)
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}

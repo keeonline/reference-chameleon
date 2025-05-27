@@ -1,0 +1,55 @@
+name: Manage the application
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The application environment name
+        required: false
+        default: test  
+      
+jobs:
+  manage-application:
+    name: Manage the chameleon services
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    env:
+      TF_VAR_app_environment: ${{inputs.environment}}
+      TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      
+      - name: Get the application version
+        id: versions
+        uses: keeonline/github-actions/artefact-version@v0.0.10
+          
+      - name: show versions
+        run: |
+          echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
+          echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
+
+      - name: Set the application version
+        id: app_version
+        shell: bash
+        run: |
+          if [ "${{ github.ref_type }}" == "branch" ]
+          then
+            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
+          else
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy application
+        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        env:
+          TF_VAR_app_version: ${{steps.app_version.outputs.value}}
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          aws_region: ${{vars.AWS_REGION}}
+          action: apply
+          terraform_codedir: deploy/aws
+          environment: test

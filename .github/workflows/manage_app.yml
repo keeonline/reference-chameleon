@@ -53,7 +53,7 @@ jobs:
             echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Deploy application
+      - name: Manage application
         uses: keeonline/github-actions/terraform-apply@v0.0.10
         env:
             TF_VAR_app_version: ${{steps.app_version.outputs.value}}

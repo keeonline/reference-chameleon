@@ -65,7 +65,7 @@ jobs:
           aws_region: ${{vars.AWS_REGION}}
           action: apply
           terraform_codedir: deploy/aws
-          environment: test
+          environment: ${{inputs.environment}}
 
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -110,7 +110,7 @@ jobs:
           aws_region: ${{vars.AWS_REGION}}
           action: destroy
           terraform_codedir: deploy/aws
-          environment: test
+          environment: ${{inputs.environment}}
             
       - name: Destroy cloud infrastructure
         uses: keeonline/github-actions/terraform-apply@v0.0.10

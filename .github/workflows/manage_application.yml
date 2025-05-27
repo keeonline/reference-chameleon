@@ -3,6 +3,16 @@ name: Manage the application
 on:
   workflow_dispatch:
     inputs:
+      action:
+        type: choice
+        description: Terraform action
+        required: true
+        options:
+          - apply-plan
+          - apply
+          - destroy-plan
+          - destroy
+        default: apply-plan
       environment:
         type: environment
         description: The application environment name
@@ -46,10 +56,10 @@ jobs:
       - name: Deploy application
         uses: keeonline/github-actions/terraform-apply@v0.0.10
         env:
-          TF_VAR_app_version: ${{steps.app_version.outputs.value}}
+            TF_VAR_app_version: ${{steps.app_version.outputs.value}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
-          action: apply
+          action: ${{inputs.action}}
           terraform_codedir: deploy/aws
-          environment: test
+          environment: ${{inputs.environment}}

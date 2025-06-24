@@ -17,7 +17,7 @@ jobs:
     env:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-      TF_VAR_vpc_cidr: 10.255.0.0/16
+      TF_VAR_vpc_cidr: ${{vars.VPC_CIDR}}
       TF_VAR_infra_version: v0.0.39
     permissions:
       contents: write

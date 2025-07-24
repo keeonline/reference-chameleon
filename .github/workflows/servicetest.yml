@@ -17,6 +17,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Local Action
+        uses: ./workflows/actions/test-action
+
       - name: Login to Docker registry
         uses: docker/login-action@v3
         with:

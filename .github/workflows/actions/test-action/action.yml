@@ -1,0 +1,9 @@
+name: Test Action
+
+runs:
+  using: composite
+  steps:
+    - name: Salutation
+      shell: bash
+      run: |
+        echo "This is a local action"

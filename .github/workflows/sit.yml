@@ -37,7 +37,7 @@ jobs:
 
       - name: Get the application version
         id: versions
-        uses: keeonline/github-actions/artefact-version@v0.0.10
+        uses: keeonline/github-actions-playground/artifact-version@v0.0.3
           
       - name: show versions
         run: |

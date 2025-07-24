@@ -46,38 +46,6 @@ jobs:
         - name: Build image
           run: docker build --build-arg VERSION=${{steps.versions.outputs.branch}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}} .  
 
-        # - name: Publish Test Report
-        #   if: always()
-        #   uses: ctrf-io/github-test-reporter@v1
-        #   with:
-        #     # report-path: './build/test-results/test/TEST-com.keeonline.chameleon.api.controller.GreetingsControllerTest.xml'
-        #     report-path: './build/test-results/test/*.xml'
-        #     integrations-config: |
-        #       {
-        #         "junit-to-ctrf": {
-        #           "enabled": true,
-        #           "action": "convert",
-        #           "options": {
-        #             "output": "./ctrf-reports/ctrf-report.json",
-        #             "toolname": "junit-to-ctrf",
-        #             "useSuiteName": false,
-        #             "env": {
-        #               "appName": "chameleon"
-        #             }
-        #           }
-        #         }
-        #       }
-
-        # - name: Generate JaCoCo Badge
-        #   uses: cicirello/jacoco-badge-generator@v2
-        #   with:
-        #     generate-branches-badge: true
-        #     jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
-
-        # - name: List files
-        #   run: |
-        #     ls -lsa ./.github/badges
-
         - name: Install docker compose
           run: |
             curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -90,17 +58,11 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{vars.DOCKERHUB_USERNAME}}" >> .env
             echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
             cat .env          
-    
-        # - name: Start the otel container
-        #   working-directory: servicetest
-        #   run: |
-        #     docker-compose up -d otel
-        #     sleep 10
-              
+                  
         - name: Start the chameleon container
           working-directory: servicetest
           run: |
-            docker-compose up -d chameleon
+            docker-compose up -d
             sleep 10
 
         - name: Download the standalone karate jar
@@ -118,16 +80,6 @@ jobs:
             name: Service Test Reports
             path: servicetest/karate/target/karate-reports
     
-        # - name: Greetings log
-        #   run: |
-        #     docker container logs servicetest-chameleon-1
-        #     sleep 10
-    
-        # - name: Otel log
-        #   run: |
-        #     docker container logs servicetest-otel-1
-        #     sleep 10
-      
         - name: Login to Docker registry
           uses: docker/login-action@v3
           with:

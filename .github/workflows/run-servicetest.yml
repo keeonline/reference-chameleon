@@ -5,4 +5,4 @@ on:
 
 jobs:
   execute:
-    uses: ./.github/workflows/servicetests.yml
+    uses: ./.github/workflows/servicetest.yml

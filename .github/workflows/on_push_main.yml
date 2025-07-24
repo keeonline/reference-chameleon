@@ -34,7 +34,7 @@ jobs:
           uses: keeonline/github-actions-playground/artifact-version@v0.0.3
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.versions.outputs.next_semantic}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon
 
         - name: Upload build artifacts
           uses: actions/upload-artifact@v4
@@ -46,7 +46,7 @@ jobs:
           run: ls -lsa ./build/libs
 
         - name: Build image
-          run: docker build --build-arg VERSION=${{steps.versions.outputs.next_semantic}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.next_semantic}} .  
+          run: docker build --build-arg VERSION=${{steps.versions.outputs.release}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}} .  
 
         - name: Login to Docker registry
           uses: docker/login-action@v3
@@ -55,7 +55,7 @@ jobs:
             password: ${{secrets.DOCKERHUB_TOKEN}}
             
         - name: Publish image
-          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.next_semantic}}
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
           
         - name: Tag the repository with the semantic version
           uses: actions/github-script@v7
@@ -64,6 +64,6 @@ jobs:
               github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/${{steps.versions.outputs.next_semantic}}',
+                ref: 'refs/tags/${{steps.versions.outputs.release}}',
                 sha: context.sha
               })

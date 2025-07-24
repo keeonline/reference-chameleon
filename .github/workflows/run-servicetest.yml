@@ -1,0 +1,8 @@
+name: Run the Service Tests
+
+on:
+  workflow_call:
+
+jobs:
+  execute:
+    uses: ./.github/workflows/servicetests.yml

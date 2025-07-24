@@ -1,7 +1,7 @@
 name: Run the Service Tests
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   execute:

@@ -1,11 +1,11 @@
-name: Run the Service Tests
+name: Service Test Execution
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   execute:
-    name: Run the service tests
+    name: Service test execution
     permissions:
       contents: write
       id-token: write
@@ -45,16 +45,10 @@ jobs:
           fi
           cat .env          
 
-      # - name: Start the otel container
-      #   working-directory: servicetest
-      #   run: |
-      #     docker-compose up -d otel
-      #     sleep 10
-          
       - name: Start the chameleon container
         working-directory: servicetest
         run: |
-          docker-compose up -d chameleon
+          docker-compose up -d
           sleep 10
 
       - uses: actions/setup-java@v4
@@ -82,11 +76,6 @@ jobs:
           docker container logs servicetest-chameleon-1
           sleep 10
   
-      # - name: Otel log
-      #   run: |
-      #     docker container logs servicetest-otel-1
-      #     sleep 10
-    
       - name: Stop and remove the containers   
         if: always()
         working-directory: servicetest

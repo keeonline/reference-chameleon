@@ -1,7 +1,7 @@
 name: Service Test Execution
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   execute:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Get the application artefact version
         id: versions
-        uses: keeonline/github-actions-playground/artifact-version@v0.0.3
+        uses: keeonline/reference-github-actions/artifact-version@v0.0.11
 
       - name: Create docker compose environment file
         working-directory: servicetest

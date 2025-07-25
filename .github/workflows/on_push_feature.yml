@@ -33,7 +33,7 @@ jobs:
 
         - name: Get the application artefact version
           id: versions
-          uses: keeonline/github-actions-playground/artifact-version@v0.0.3
+          uses: keeonline/reference-github-actions/artefact-version@v0.0.11
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.versions.outputs.branch}} build --no-daemon

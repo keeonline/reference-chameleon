@@ -41,9 +41,8 @@ jobs:
           
       - name: show versions
         run: |
-          echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
-          echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
-          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch}}"
+          echo "release-semantic=${{steps.versions.outputs.release}}"
 
       - name: Set the application version
         id: app_version
@@ -51,9 +50,9 @@ jobs:
         run: |
           if [ "${{ github.ref_type }}" == "branch" ]
           then
-            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
+            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
           else
-            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+            echo "value=${{steps.versions.outputs.release}}" >> $GITHUB_OUTPUT
           fi
 
       - name: Deploy application

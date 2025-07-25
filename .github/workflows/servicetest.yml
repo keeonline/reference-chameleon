@@ -1,11 +1,11 @@
-name: Service Test Execution
+name: Run the Service Tests
 
 on:
   workflow_dispatch:
 
 jobs:
   execute:
-    name: Service test execution
+    name: Execute Tests
     runs-on: ubuntu-24.04
     steps:
 
@@ -31,7 +31,7 @@ jobs:
 
       - name: Get the application artefact version
         id: versions
-        uses: keeonline/reference-github-actions/artifact-version@v0.0.11
+        uses: keeonline/reference-github-actions/artefact-version@v0.0.11
 
       - name: Create docker compose environment file
         working-directory: servicetest

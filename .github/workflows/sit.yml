@@ -25,7 +25,7 @@ jobs:
     steps:
       
       - name: Provision cloud infrastructure
-        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        uses: keeonline/reference-github-actions/terraform-apply@v0.0.11
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Get the application version
         id: versions
-        uses: keeonline/github-actions-playground/artifact-version@v0.0.3
+        uses: keeonline/reference-github-actions/artifact-version@v0.0.11
           
       - name: show versions
         run: |

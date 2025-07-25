@@ -1,9 +1,0 @@
-name: Run the Service Tests
-
-on:
-  workflow_dispatch:
-
-jobs:
-  execute:
-    uses: ./.github/workflows/servicetest.yml
-    secrets: inherit

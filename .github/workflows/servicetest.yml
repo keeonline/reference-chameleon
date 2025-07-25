@@ -5,7 +5,7 @@ on:
 
 jobs:
   execute:
-    name: Service test execution
+    name: Run the Service Tests
     runs-on: ubuntu-24.04
     steps:
 

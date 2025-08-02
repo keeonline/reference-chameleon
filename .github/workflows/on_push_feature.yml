@@ -46,7 +46,6 @@ jobs:
 
         - name: Show build outputs
           run: |
-            echo "********** BUILD OUTPUTS FOLLOW ***********"
             ls -lsa build/libs
 
         # - name: Build image

@@ -34,11 +34,21 @@ jobs:
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.versions.outputs.branch}} build --no-daemon
 
+        - name: Show build outputs
+          run: |
+            echo "********** BUILD OUTPUTS FOLLOW ***********"
+            ls -lsa build/libs
+
         - name: Upload build reports
           uses: actions/upload-artifact@v4
           with:
             name: Build Reports
             path: build/reports
+
+        - name: Show build outputs
+          run: |
+            echo "********** BUILD OUTPUTS FOLLOW ***********"
+            ls -lsa build/libs
 
         # - name: Build image
         #   run: docker build --build-arg VERSION=${{steps.versions.outputs.branch}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}} .  

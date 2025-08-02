@@ -34,7 +34,7 @@ jobs:
           uses: keeonline/gh-actions/actions/artifact-version@v0.0.2
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.versions.outputs.branch}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon
 
         - name: Show build outputs
           run: |

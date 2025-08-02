@@ -29,9 +29,9 @@ jobs:
         - name: Setup Gradle            
           uses: gradle/actions/setup-gradle@v4
 
-        - name: Get the application artefact version
+        - name: Get the application artifact version
           id: versions
-          uses: keeonline/gh-actions/artefact-version@v0.0.2
+          uses: keeonline/gh-actions/artifact-version@v0.0.2
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon

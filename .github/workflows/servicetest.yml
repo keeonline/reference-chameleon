@@ -31,7 +31,7 @@ jobs:
 
       - name: Get the application artefact version
         id: versions
-        uses: keeonline/reference-github-actions/artefact-version@v0.0.11
+        uses: keeonline/gh-actions/artefact-version@v0.0.2
 
       - name: Create docker compose environment file
         working-directory: servicetest
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '23'
+          java-version: '21'
   
       - name: Download the standalone karate jar
         run: |

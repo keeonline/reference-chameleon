@@ -24,14 +24,14 @@ jobs:
           uses: actions/setup-java@v4
           with:
             distribution: 'temurin'
-            java-version: 23
+            java-version: 21
 
         - name: Setup Gradle            
           uses: gradle/actions/setup-gradle@v4
 
         - name: Get the application artefact version
           id: versions
-          uses: keeonline/reference-github-actions/artefact-version@v0.0.11
+          uses: keeonline/gh-actions/artefact-version@v0.0.2
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon

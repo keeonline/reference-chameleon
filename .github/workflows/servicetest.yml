@@ -31,7 +31,7 @@ jobs:
 
       - name: Get the application artifact version
         id: versions
-        uses: keeonline/gh-actions/artifact-version@v0.0.2
+        uses: keeonline/gh-actions/actions/artifact-version@v0.0.2
 
       - name: Create docker compose environment file
         working-directory: servicetest

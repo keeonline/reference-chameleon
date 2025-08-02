@@ -37,7 +37,7 @@ jobs:
 
       - name: Get the application version
         id: versions
-        uses: keeonline/gh-actions/artifact-version@v0.0.2
+        uses: keeonline/gh-actions/actions/artifact-version@v0.0.2
           
       - name: show versions
         run: |

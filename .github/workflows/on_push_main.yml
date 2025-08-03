@@ -63,6 +63,14 @@ jobs:
                          -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}} \
                          .  
 
+        - name: List image 
+          run: | 
+            docker image ls ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+
+        - name: Inspect image
+          run: | 
+            docker inspect --type=image ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+
         # # - name: Login to Docker registry
         # #   uses: docker/login-action@v3
         # #   with:

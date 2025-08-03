@@ -44,12 +44,15 @@ jobs:
             name: Build Reports
             path: build/reports
 
-        - name: Show build outputs
-          run: |
-            ls -lsa build/libs
+        - name: Build image
+          run: | 
+            docker build --build-arg VERSION=${{steps.versions.outputs.branch}} \
+                         -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}} \
+                         .  
 
-        # - name: Build image
-        #   run: docker build --build-arg VERSION=${{steps.versions.outputs.branch}} -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}} .  
+        - name: Inspect image
+          run: | 
+            docker inspect --type=image ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
 
         # - name: Install docker compose
         #   run: |

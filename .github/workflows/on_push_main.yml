@@ -60,16 +60,16 @@ jobs:
         - name: Build image
           run: | 
             docker build --build-arg VERSION=${{steps.versions.outputs.release}} \
-                         -t ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}} \
+                         -t chameleon:${{steps.versions.outputs.release}} \
                          .  
 
         - name: List image 
           run: | 
-            docker image ls ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+            docker image ls chameleon:${{steps.versions.outputs.release}}
 
         - name: Inspect image
           run: | 
-            docker inspect --type=image ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+            docker inspect --type=image chameleon:${{steps.versions.outputs.release}}
 
         # # - name: Login to Docker registry
         # #   uses: docker/login-action@v3

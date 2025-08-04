@@ -70,7 +70,7 @@ jobs:
           working-directory: servicetest
           run: |
             docker-compose up -d
-            sleep 10
+            sleep 5
 
         - name: Setup karate
           run: |

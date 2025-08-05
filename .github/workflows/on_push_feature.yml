@@ -99,14 +99,23 @@ jobs:
           run: |
             docker-compose down 
         
-        # - name: Login to Docker registry
-        #   uses: docker/login-action@v3
-        #   with:
-        #     username: ${{vars.DOCKERHUB_USERNAME}}
-        #     password: ${{secrets.DOCKERHUB_TOKEN}}
+        - name: Login to Docker registry
+          uses: docker/login-action@v3
+          with:
+            username: ${{vars.DOCKERHUB_USERNAME}}
+            password: ${{secrets.DOCKERHUB_TOKEN}}
             
-        # - name: Publish image
-        #   run: docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
+        - name: Tag image
+          run: |
+            docker tag chameleon:${{steps.versions.outputs.branch}} \
+                       ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
 
-    
+        - name: List chameleon images
+          run: |
+            docker images | grep chameleon
+
+        - name: Publish image
+          run: |
+            docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
+
     

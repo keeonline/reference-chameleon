@@ -10,9 +10,10 @@ terraform {
 provider "aws" {
   default_tags {
     tags = {
-      AppEnvironment = "${var.app_environment}"
-      IacVersion     = "${var.app_version}"
-      IacRepo        = "${var.app_repo}"
+      AppEnvironment   = "${var.app_environment}"
+      IacVersion       = "${var.app_version}"
+      IacRepo          = "${var.app_repo}"
+      InfraEnvironment = "${var.infra_environment}"
     }
   }
 }

@@ -29,9 +29,6 @@ resource "aws_ecs_task_definition" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-task-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -55,9 +52,6 @@ resource "aws_lb_target_group" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-tg-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 
 }
@@ -79,9 +73,6 @@ resource "aws_lb_listener_rule" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-alb-listener-rule-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -106,8 +97,5 @@ resource "aws_ecs_service" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-ecs-service-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }

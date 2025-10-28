@@ -29,9 +29,6 @@ resource "aws_ecs_task_definition" "alpha" {
 
   tags = {
     Name        = "${var.app_environment}-task-alpha"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -55,9 +52,6 @@ resource "aws_lb_target_group" "alpha" {
 
   tags = {
     Name        = "${var.app_environment}-tg-alpha"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -78,9 +72,6 @@ resource "aws_lb_listener_rule" "alpha" {
 
   tags = {
     Name        = "${var.app_environment}-alb-listener-rule-alpha"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -107,8 +98,5 @@ resource "aws_ecs_service" "alpha" {
 
   tags = {
     Name        = "${var.app_environment}-ecs-service-alpha"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }

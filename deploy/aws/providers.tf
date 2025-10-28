@@ -7,4 +7,12 @@ terraform {
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  default_tags {
+    tags = {
+      AppEnvironment = "${var.app_environment}"
+      IacVersion     = "${var.app_version}"
+      IacRepo        = "${var.app_repo}"
+    }
+  }
+}

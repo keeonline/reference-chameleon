@@ -39,7 +39,7 @@ Feature: Call the greetings endpoints of the chameleon service
     
   Scenario: Call to service endpoints that has no request handler
     Given url 'http://localhost:8080'
-    And path 'chameleon/v2/like'
+    And path 'tbd/chameleon/v2/like'
     When method GET
     Then status 404
     * match response.status == 404

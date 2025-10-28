@@ -18,20 +18,20 @@ jobs:
       TF_VAR_app_environment: ${{inputs.environment}}
       TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
       TF_VAR_vpc_cidr: ${{vars.VPC_CIDR}}
-      TF_VAR_infra_version: v0.0.42
+      TF_VAR_infra_version: v0.0.49
     permissions:
       contents: write
       id-token: write
     steps:
       
       - name: Provision cloud infrastructure
-        uses: keeonline/reference-github-actions/terraform-apply@v0.0.11
+        uses: keeonline/reference-github-actions/terraform-apply@v0.0.17
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
           action: apply
-          repo_name: devops-demystified-fundamentals-infra-aws
-          repo_ref: v0.0.42
+          repo_name: reference-infra-aws
+          repo_ref: v0.0.49
           terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}
 
@@ -56,7 +56,7 @@ jobs:
           fi
 
       - name: Deploy application
-        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        uses: keeonline/github-actions/terraform-apply@v0.0.17
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}
         with:
@@ -101,7 +101,7 @@ jobs:
           path: sit/karate/target/karate-reports
 
       - name: Undeploy application
-        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        uses: keeonline/github-actions/terraform-apply@v0.0.17
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
@@ -112,14 +112,14 @@ jobs:
           environment: ${{inputs.environment}}
             
       - name: Destroy cloud infrastructure
-        uses: keeonline/github-actions/terraform-apply@v0.0.10
+        uses: keeonline/github-actions/terraform-apply@v0.0.17
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
           action: destroy
-          repo_name: devops-demystified-fundamentals-infra-aws
-          repo_ref: v0.0.42
+          repo_name: reference-infra-aws
+          repo_ref: v0.0.49
           terraform_codedir: terraform
           environment: ${{vars.INFRA_ENVIRONMENT}}

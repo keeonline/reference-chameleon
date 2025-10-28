@@ -18,7 +18,7 @@ Feature: Call the greetings endpoints of the chameleon service
     Then status 404
     * match response.status == 404
     * match response.error == 'Not Found'
-    * match response.path == '/chameleon/v1/like'
+    * match response.path == '/tbd/chameleon/v1/like'
 
   Scenario: Call to a chameleon variant service that is not deployed
     Given url 'http://localhost:8080'
@@ -44,7 +44,7 @@ Feature: Call the greetings endpoints of the chameleon service
     Then status 404
     * match response.status == 404
     * match response.error == 'Not Found'
-    * match response.path == '/chameleon/v2/like'
+    * match response.path == '/tbd/chameleon/v2/like'
 
   Scenario: Call to a chameleon variant service that is not deployed
     Given url 'http://localhost:8080'

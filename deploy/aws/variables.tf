@@ -13,3 +13,7 @@ variable "app_repo" {
 variable "infra_environment" {
   type = string
 }
+
+variable "base_task_priority" {
+  type = number
+}

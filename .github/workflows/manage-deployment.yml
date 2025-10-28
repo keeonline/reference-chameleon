@@ -47,6 +47,7 @@ jobs:
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}
           TF_VAR_app_repo: ${{github.event.repository.name}}
           TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
+          TF_VAR_base_task_priority: ${{vars.BASE_TASK_PRIORITY}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}

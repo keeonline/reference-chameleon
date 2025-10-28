@@ -59,7 +59,7 @@ resource "aws_lb_target_group" "bravo" {
 
 resource "aws_lb_listener_rule" "bravo" {
   listener_arn = data.aws_lb_listener.api_requests.arn
-  priority     = 20
+  priority     = var.base_task_priority+2
 
   action {
     type             = "forward"

@@ -13,6 +13,7 @@ resource "aws_ecs_task_definition" "bravo" {
       image = "docker.io/keeonline/chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "bravo" },
+        { "name" : "APP_ENV", "value" : "${var.app_environment}" },
       ]
       cpu       = 256
       memory    = 512
@@ -29,9 +30,6 @@ resource "aws_ecs_task_definition" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-task-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -48,23 +46,20 @@ resource "aws_lb_target_group" "bravo" {
     unhealthy_threshold = 3
     interval            = 10
     matcher             = "200"
-    path                = "/bravo/actuator/health"
+    path                = "/${var.app_environment}/bravo/actuator/health"
     port                = 9080
     protocol            = "HTTP"
   }
 
   tags = {
     Name        = "${var.app_environment}-tg-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 
 }
 
 resource "aws_lb_listener_rule" "bravo" {
   listener_arn = data.aws_lb_listener.api_requests.arn
-  priority     = 20
+  priority     = var.base_alb_listener_rule_priority+2
 
   action {
     type             = "forward"
@@ -73,15 +68,12 @@ resource "aws_lb_listener_rule" "bravo" {
 
   condition {
     path_pattern {
-      values = ["/bravo/*"]
+      values = ["/${var.app_environment}/bravo/*"]
     }
   }
 
   tags = {
     Name        = "${var.app_environment}-alb-listener-rule-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }
 
@@ -106,8 +98,5 @@ resource "aws_ecs_service" "bravo" {
 
   tags = {
     Name        = "${var.app_environment}-ecs-service-bravo"
-    Environment = "${var.app_environment}"
-    Category    = "application"
-    Version     = "${var.app_version}"
   }
 }

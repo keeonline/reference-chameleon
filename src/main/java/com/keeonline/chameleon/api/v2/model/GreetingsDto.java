@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class GreetingsDto {
 
-    private final int version = 1;
+    private final int version = 2;
     private String serviceName;
     private String requestId;
 

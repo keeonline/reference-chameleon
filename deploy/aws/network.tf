@@ -1,6 +1,6 @@
 data "aws_vpc" "main" {
   filter {
-    name   = "tag:Environment"
+    name   = "tag:InfraEnvironment"
     values = ["${var.infra_environment}"]
   }
 }
@@ -8,7 +8,7 @@ data "aws_vpc" "main" {
 
 data "aws_subnets" "public" {
   filter {
-    name   = "tag:Environment"
+    name   = "tag:InfraEnvironment"
     values = ["${var.infra_environment}"]
   }
 
@@ -26,7 +26,7 @@ data "aws_subnet" "public" {
 
 data "aws_subnets" "private" {
   filter {
-    name   = "tag:Environment"
+    name   = "tag:InfraEnvironment"
     values = ["${var.infra_environment}"]
   }
 

@@ -14,6 +14,6 @@ variable "infra_environment" {
   type = string
 }
 
-variable "base_alb_listner_rule_priority" {
+variable "base_alb_listener_rule_priority" {
   type = number
 }

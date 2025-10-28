@@ -58,7 +58,7 @@ resource "aws_lb_target_group" "alpha" {
 
 resource "aws_lb_listener_rule" "alpha" {
   listener_arn = data.aws_lb_listener.api_requests.arn
-  priority     = var.base_alb_listner_rule_priority+1
+  priority     = var.base_alb_listener_rule_priority+1
 
   action {
     type             = "forward"

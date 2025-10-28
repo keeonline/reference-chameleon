@@ -13,6 +13,7 @@ resource "aws_ecs_task_definition" "bravo" {
       image = "docker.io/keeonline/chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "bravo" },
+        { "name" : "APP_ENV", "value" : "${var.app_environment}" },
       ]
       cpu       = 256
       memory    = 512
@@ -45,7 +46,7 @@ resource "aws_lb_target_group" "bravo" {
     unhealthy_threshold = 3
     interval            = 10
     matcher             = "200"
-    path                = "/bravo/actuator/health"
+    path                = "/${var.app_environment}/bravo/actuator/health"
     port                = 9080
     protocol            = "HTTP"
   }
@@ -67,7 +68,7 @@ resource "aws_lb_listener_rule" "bravo" {
 
   condition {
     path_pattern {
-      values = ["/bravo/*"]
+      values = ["/${var.app_environment}/bravo/*"]
     }
   }
 

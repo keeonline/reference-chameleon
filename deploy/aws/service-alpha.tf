@@ -13,6 +13,7 @@ resource "aws_ecs_task_definition" "alpha" {
       image = "docker.io/keeonline/chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "alpha" },
+        { "name" : "APP_ENV", "value" : "${var.app_environment}" },
       ]
       cpu       = 256
       memory    = 512
@@ -45,7 +46,7 @@ resource "aws_lb_target_group" "alpha" {
     unhealthy_threshold = 3
     interval            = 10
     matcher             = "200"
-    path                = "/alpha/actuator/health"
+    path                = "/${var.app_environment}/alpha/actuator/health"
     port                = 9080
     protocol            = "HTTP"
   }
@@ -66,7 +67,7 @@ resource "aws_lb_listener_rule" "alpha" {
 
   condition {
     path_pattern {
-      values = ["/alpha/*"]
+      values = ["/${var.app_environment}/alpha/*"]
     }
   }
 

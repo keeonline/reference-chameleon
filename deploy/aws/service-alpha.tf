@@ -82,7 +82,7 @@ resource "aws_ecs_service" "alpha" {
   name            = "${var.app_environment}-ecs-service-alpha"
   cluster         = data.aws_ecs_cluster.applications.id
   task_definition = aws_ecs_task_definition.alpha.arn
-  desired_count   = 1
+  desired_count   = var.az_use_count
   launch_type     = "FARGATE"
 
   load_balancer {

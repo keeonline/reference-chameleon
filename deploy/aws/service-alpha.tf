@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "alpha" {
         {
           containerPort = 8080
           protocol      = "tcp"
-        }
+        },
         {
           containerPort = 9080
           protocol      = "tcp"

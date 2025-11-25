@@ -5,7 +5,6 @@ resource "aws_ecs_task_definition" "alpha" {
   cpu                      = 256
   memory                   = 512
   execution_role_arn       = data.aws_iam_role.ecs_task_exec.arn
-  # task_role_arn            = data.aws_iam_role.ecs_task.arn
 
   container_definitions = jsonencode([
     {
@@ -17,11 +16,13 @@ resource "aws_ecs_task_definition" "alpha" {
       ]
       cpu       = 256
       memory    = 512
-      essential = true
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 8080
+          protocol      = "tcp"
+        },
+        {
+          containerPort = 9080
           protocol      = "tcp"
         }
       ]

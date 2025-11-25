@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "bravo" {
          {
           containerPort = 8080
           protocol      = "tcp"
-        }
+        },
         {
           containerPort = 9080
           protocol      = "tcp"

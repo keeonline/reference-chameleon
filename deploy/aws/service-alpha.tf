@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "alpha" {
       ]
       cpu       = 256
       memory    = 512
-      essential = true
+#      essential = true
       portMappings = [
         {
           containerPort = 8080

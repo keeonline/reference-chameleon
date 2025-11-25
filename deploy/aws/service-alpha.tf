@@ -21,7 +21,10 @@ resource "aws_ecs_task_definition" "alpha" {
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 8080
+          protocol      = "tcp"
+        }
+        {
+          containerPort = 9080
           protocol      = "tcp"
         }
       ]

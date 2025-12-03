@@ -40,7 +40,7 @@ jobs:
 
   teardown-infra:
     name: Teardown infrastructure
-    needs: provision-infra
+    needs: [ infra-config, provision-infra ]
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write

@@ -8,24 +8,25 @@ on:
         required: false
         default: test  
 
-env:
-  INFRA_REPO_NAME: keeonline/reference-infra-aws
-  INFRA_REPO_REF: v0.0.56
-      
 jobs:
-  get-infra-env:
-    name: Get infra environment
+  infra-config:
+    name: Get infra configuration
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     outputs:
-      infra_env: ${{ steps.infra_env.outputs.value }}
+      env: ${{ steps.get_config.outputs.environment }}
+      repo_name: ${{ steps.get_config.outputs.repo_name }}
+      repo_ref: ${{ steps.get_config.outputs.repo_ref }}
     steps:
-      - id: infra_env
-        run: echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
+      - id: get_config
+        run: |
+          echo "env=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
+          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT
+          echo "repo_ref=v0.0.56" >> $GITHUB_OUTPUT
 
   provision-infra:
     name: Provision infrastructure
-    needs: get-infra-env
+    needs: infra-config
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write
@@ -33,9 +34,9 @@ jobs:
       inherit
     with:
       action: apply-plan
-      environment: ${{needs.get-infra-env.outputs.infra_env}}
-      repo_name: "$INFRA_REPO_NAME"
-      repo_ref: "$INFRA_REPO_REF"
+      environment: ${{needs.infra-config.outputs.env}}
+      repo_name: ${{needs.infra-config.outputs.repo_name}}
+      repo_ref: ${{needs.infra-config.outputs.repo_ref}}
 
   teardown-infra:
     name: Teardown infrastructure
@@ -47,7 +48,7 @@ jobs:
       inherit
     with:
       action: destroy-plan
-      environment: ${{needs.get-infra-env.outputs.infra_env}}
-      repo_name: "$INFRA_REPO_NAME"
-      repo_ref: "$INFRA_REPO_REF"
+      environment: ${{needs.infra-config.outputs.env}}
+      repo_name: ${{needs.infra-config.outputs.repo_name}}
+      repo_ref: ${{needs.infra-config.outputs.repo_ref}}
 

@@ -10,7 +10,7 @@ on:
       
 jobs:
   get-infra-env:
-    name: Get environment
+    name: Get infra environment
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     outputs:
@@ -20,7 +20,7 @@ jobs:
         run: echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
 
   provision-infra:
-    name: Manage resources
+    name: Provision infrastructure
     needs: get-infra-env
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
@@ -29,6 +29,20 @@ jobs:
       inherit
     with:
       action: apply-plan
+      environment: ${{needs.get-infra-env.outputs.infra_env}}
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: v0.0.56
+
+  teardown-infra:
+    name: Teardown infrastructure
+    needs: provision-infra
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy-plan
       environment: ${{needs.get-infra-env.outputs.infra_env}}
       repo_name: keeonline/reference-infra-aws
       repo_ref: v0.0.56

@@ -34,8 +34,8 @@ jobs:
     with:
       action: apply-plan
       environment: ${{needs.get-infra-env.outputs.infra_env}}
-      repo_name: $INFRA_REPO_NAME
-      repo_ref: $INFRA_REPO_REF
+      repo_name: env.INFRA_REPO_NAME
+      repo_ref: env.INFRA_REPO_REF
 
   teardown-infra:
     name: Teardown infrastructure
@@ -48,6 +48,6 @@ jobs:
     with:
       action: destroy-plan
       environment: ${{needs.get-infra-env.outputs.infra_env}}
-      repo_name: $INFRA_REPO_NAME
-      repo_ref: $INFRA_REPO_REF
+      repo_name: env.INFRA_REPO_NAME
+      repo_ref: env.INFRA_REPO_REF
 

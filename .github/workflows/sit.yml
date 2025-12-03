@@ -12,6 +12,7 @@ jobs:
   get-infra-env:
     name: Get environment
     runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
     outputs:
       infra_env: ${{ steps.infra_env.outputs.value }}
     steps:

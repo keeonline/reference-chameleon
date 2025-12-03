@@ -4,7 +4,7 @@ Feature: Call the greetings endpoints of the chameleon service
 
   Scenario: Successful call to chameleon service
     Given url 'http://localhost:8080'
-    And path 'tbd/chameleon/v1/greetings'
+    And path 'default/chameleon/v1/greetings'
     When method GET
     Then status 200
     * match response.serviceName == 'chameleon'
@@ -13,16 +13,16 @@ Feature: Call the greetings endpoints of the chameleon service
 
   Scenario: Call to service endpoints that has no request handler
     Given url 'http://localhost:8080'
-    And path 'tbd/chameleon/v1/like'
+    And path 'default/chameleon/v1/like'
     When method GET
     Then status 404
     * match response.status == 404
     * match response.error == 'Not Found'
-    * match response.path == '/tbd/chameleon/v1/like'
+    * match response.path == '/default/chameleon/v1/like'
 
   Scenario: Call to a chameleon variant service that is not deployed
     Given url 'http://localhost:8080'
-    And path 'tbd/zulu/v1/greetings'
+    And path 'default/zulu/v1/greetings'
     When method GET
     Then status 404
 
@@ -30,7 +30,7 @@ Feature: Call the greetings endpoints of the chameleon service
 
   Scenario: Successful call to chameleon service
     Given url 'http://localhost:8080'
-    And path 'tbd/chameleon/v2/greetings'
+    And path 'default/chameleon/v2/greetings'
     When method GET
     Then status 200
     * match response.serviceName == 'chameleon'
@@ -39,12 +39,12 @@ Feature: Call the greetings endpoints of the chameleon service
     
   Scenario: Call to service endpoints that has no request handler
     Given url 'http://localhost:8080'
-    And path 'tbd/chameleon/v2/like'
+    And path 'default/chameleon/v2/like'
     When method GET
     Then status 404
     * match response.status == 404
     * match response.error == 'Not Found'
-    * match response.path == '/tbd/chameleon/v2/like'
+    * match response.path == '/default/chameleon/v2/like'
 
   Scenario: Call to a chameleon variant service that is not deployed
     Given url 'http://localhost:8080'

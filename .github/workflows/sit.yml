@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
     outputs:
-      env: ${{ steps.get_config.outputs.environment }}
+      environment: ${{ steps.get_config.outputs.environment }}
       repo_name: ${{ steps.get_config.outputs.repo_name }}
       repo_ref: ${{ steps.get_config.outputs.repo_ref }}
     steps:
       - id: get_config
         run: |
-          echo "env=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
+          echo "environment=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
           echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT
           echo "repo_ref=v0.0.56" >> $GITHUB_OUTPUT
 
@@ -34,7 +34,7 @@ jobs:
       inherit
     with:
       action: apply-plan
-      environment: ${{needs.infra-config.outputs.env}}
+      environment: ${{needs.infra-config.outputs.environment}}
       repo_name: ${{needs.infra-config.outputs.repo_name}}
       repo_ref: ${{needs.infra-config.outputs.repo_ref}}
 
@@ -48,7 +48,6 @@ jobs:
       inherit
     with:
       action: destroy-plan
-      environment: ${{needs.infra-config.outputs.env}}
+      environment: ${{needs.infra-config.outputs.environment}}
       repo_name: ${{needs.infra-config.outputs.repo_name}}
       repo_ref: ${{needs.infra-config.outputs.repo_ref}}
-

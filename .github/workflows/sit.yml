@@ -11,7 +11,7 @@ on:
 jobs:
   provision-infra:
     name: Manage resources
-    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write
     secrets:

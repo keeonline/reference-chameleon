@@ -48,6 +48,7 @@ jobs:
           TF_VAR_app_repo: ${{github.event.repository.name}}
           TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
           TF_VAR_base_alb_listener_rule_priority: ${{vars.BASE_ALB_LISTENER_RULE_PRIORITY}}
+          TF_VAR_az_use_count: ${{vars.AZ_USE_COUNT}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}

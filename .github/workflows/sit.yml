@@ -16,7 +16,7 @@ jobs:
       infra_env: ${{ steps.infra_env.outputs.value }}
     steps:
       - id: infra_env
-        run: echo "value=${{vars.INFRA_ENVIRONMENT}}" >> "$GITHUB_OUT
+        run: echo "value=${{vars.INFRA_ENVIRONMENT}}" >> $GITHUB_OUTPUT
 
   provision-infra:
     name: Manage resources

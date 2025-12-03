@@ -9,8 +9,18 @@ on:
         default: test  
       
 jobs:
+  get-infra-env:
+    name: Get environment
+    runs-on: ubuntu-24.04
+    outputs:
+      infra_env: ${{ steps.infra_env.outputs.value }}
+    steps:
+      - id: infra_env
+        run: echo "value=${{vars.INFRA_ENVIRONMENT}}" >> "$GITHUB_OUT
+
   provision-infra:
     name: Manage resources
+    needs: get-infra-env
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write
@@ -18,7 +28,7 @@ jobs:
       inherit
     with:
       action: apply-plan
-      environment: ${{ vars.INFRA_ENVIRONMENT }}
+      environment: ${{needs.get-infra-env.outputs.infra_env}}
       repo_name: keeonline/reference-infra-aws
       repo_ref: v0.0.56
 

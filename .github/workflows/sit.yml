@@ -37,6 +37,7 @@ jobs:
       environment: ${{needs.infra-config.outputs.environment}}
       repo_name: ${{needs.infra-config.outputs.repo_name}}
       repo_ref: ${{needs.infra-config.outputs.repo_ref}}
+      checkout_repo: true
 
   teardown-infra:
     name: Teardown infrastructure
@@ -51,3 +52,5 @@ jobs:
       environment: ${{needs.infra-config.outputs.environment}}
       repo_name: ${{needs.infra-config.outputs.repo_name}}
       repo_ref: ${{needs.infra-config.outputs.repo_ref}}
+      checkout_repo: true
+

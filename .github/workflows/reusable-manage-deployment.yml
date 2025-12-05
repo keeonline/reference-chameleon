@@ -1,0 +1,24 @@
+name: Reusable manage deployment
+
+on:
+  workflow_call:
+    inputs:
+      action:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+
+jobs:
+  manage-deployment-resources:
+    name: Manage deployment resources
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    permissions:
+      id-token: write
+    steps:
+      - name: Output values
+        run: |
+          echo "action=${{inputs.action}}"
+          echo "environment=${{inputs.environment}}"

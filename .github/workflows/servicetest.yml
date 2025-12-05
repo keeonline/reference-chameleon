@@ -40,7 +40,7 @@ jobs:
           sleep 10
 
       - name: Execute the service tests
-        uses: keeonline/reference-githib-actions/actions/karate-tests@l2
+        uses: keeonline/reference-github-actions/actions/karate-tests@l2
         with:
           tests_directory: servicetest/karate
           reports_upload_title: Service Test Reports

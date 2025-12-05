@@ -39,26 +39,12 @@ jobs:
           docker-compose up -d
           sleep 10
 
-      - uses: actions/setup-java@v4
+      - name: Execute the service tests
+        uses: keeonline/reference-githib-actions/actions/karate-tests@l2
         with:
-          distribution: 'temurin'
-          java-version: '21'
-  
-      - name: Download the standalone karate jar
-        run: |
-          wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
-  
-      - name: Execute the service tests using karate
-        working-directory: servicetest/karate
-        run: |
-          java -jar /opt/karate.jar .
-              
-      - name: Upload service test reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: Service Test Reports
-          path: servicetest/karate/target/karate-reports
-  
+          tests_directory: servicetest/karate
+          reports_upload_title: Service Test Reports
+
       - name: Stop and remove containers   
         if: always()
         working-directory: servicetest

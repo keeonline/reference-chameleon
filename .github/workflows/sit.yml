@@ -31,10 +31,10 @@ jobs:
           ALB=$(aws elbv2 describe-load-balancers --names ${{vars.INFRA_ENVIRONMENT}}-alb --query 'LoadBalancers[*].[DNSName]' --output text)
           echo "value=$ALB" >> $GITHUB_OUTPUT
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Clone the sit test folder on the runner
+        uses: actions/checkout/@v4
         with:
-          fetch-depth: 0
+          sparse-checkout: sit/karate
 
       - name: Execute the system integration tests
         uses: keeonline/reference-github-actions/actions/karate-tests@l2

@@ -13,11 +13,34 @@ jobs:
     name: Execute SITs against deployed application
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    # permissions:
-    #   contents: write
-    #   id-token: write
+    permissions:
+      id-token: write
     steps:
       
       - name: Show outputs
         run: |
           echo "environment=${{inputs.environment}}"
+
+      - name: Configure credentials for AWS CLI usage
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{vars.AWS_REGION}}
+      
+      - name: Get the application load balancer DNS name
+        id: alb_dns
+        run: |
+          ALB=$(aws elbv2 describe-load-balancers --names ${{vars.INFRA_ENVIRONMENT}}-alb --query 'LoadBalancers[*].[DNSName]' --output text)
+          echo "value=$ALB" >> $GITHUB_OUTPUT
+
+      - name: Clone the sit test folder on the runner
+        uses: actions/checkout/@v4
+        with:
+          sparse-checkout: sit/karate
+
+      - name: Execute the system integration tests
+        uses: keeonline/reference-github-actions/actions/karate-tests@l2
+        with:
+          tests_directory: sit/karate
+          reports_upload_title: System Integration Test Reports
+          baseurl: http://${{steps.alb_dns.outputs.value}}/${{inputs.environment}}

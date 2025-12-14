@@ -3,9 +3,6 @@ name: Reusable SIT execution
 on:
   workflow_call:
     inputs:
-      action:
-        type: string
-        required: true
       environment:
         type: string
         required: true

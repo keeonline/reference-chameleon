@@ -20,38 +20,11 @@ on:
 jobs:
   manage-deployment:
     name: Manage deployment
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
+    uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
-    steps:
-      - name: Get the artefact version values
-        id: versions
-        uses: keeonline/gh-actions/actions/artifact-version@v0.0.4
-
-      - name: Set the application version
-        id: app_version
-        shell: bash
-        run: |
-          if [ "${{ github.ref_type }}" == "branch" ]
-          then
-            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
-          else
-            echo "value=${{steps.versions.outputs.release}}" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Terraform action
-        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.4
-        env:
-          TF_VAR_app_environment: ${{inputs.environment}}
-          TF_VAR_app_version: ${{steps.app_version.outputs.value}}
-          TF_VAR_app_repo: ${{github.event.repository.name}}
-          TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-          TF_VAR_base_alb_listener_rule_priority: ${{vars.BASE_ALB_LISTENER_RULE_PRIORITY}}
-          TF_VAR_az_use_count: ${{vars.AZ_USE_COUNT}}
-        with:
-          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
-          aws_region: ${{secrets.AWS_REGION}}
-          action: ${{inputs.action}}
-          environment: ${{inputs.environment}}
-          tfdir: deploy/aws
+    secrets:
+      inherit
+    with:
+      action: ${{ inputs.action }}
+      environment: ${{ inputs.environment }}

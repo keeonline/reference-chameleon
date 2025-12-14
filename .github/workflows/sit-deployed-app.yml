@@ -1,0 +1,20 @@
+name: Run the SITs against a deployed application
+
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                type: environment
+                required: false
+                default: test
+
+jobs:
+    execute-sit:
+      name: Run the SITs against a deployed application
+      uses: ./.github/workflows/reusable-sit-execution.yml
+      permissions:
+        id-token: write
+      secrets:
+        inherit
+      with:
+        environment: ${{ inputs.environment }}

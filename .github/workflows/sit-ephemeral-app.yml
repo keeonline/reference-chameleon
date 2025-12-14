@@ -1,0 +1,23 @@
+name: Run the System Integration Tests against an ephemeral application
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        required: false
+        default: test  
+      
+jobs:
+  execute-sit:
+    name: Execute SITs against an ephemeral application
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    # permissions:
+    #   contents: write
+    #   id-token: write
+    steps:
+      
+      - name: Show outputs
+        run: |
+          echo "environment=${{inputs.environment}}"

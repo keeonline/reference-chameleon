@@ -1,23 +1,20 @@
-name: Run the System Integration Tests against a deployed application
+name: Run the SITs against a deployed application
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        type: environment
-        required: false
-        default: test  
-      
+    workflow_dispatch:
+        inputs:
+            environment:
+                type: environment
+                required: false
+                default: test
+
 jobs:
-  execute-sit:
-    name: Execute SITs against deployed application
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
-    # permissions:
-    #   contents: write
-    #   id-token: write
-    steps:
-      
-      - name: Show outputs
-        run: |
-          echo "environment=${{inputs.environment}}"
+    execute-sit:
+      name: Run the SITs against a deployed application
+      uses: ./.github/workflows/reusable-sit-execution.yml
+      permissions:
+        id-token: write
+      secrets:
+        inherit
+      with:
+        environment: ${{ inputs.environment }}

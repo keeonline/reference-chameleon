@@ -9,15 +9,37 @@ on:
         default: test  
       
 jobs:
+  deploy-services:
+    name: Deploy the application services
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      environment: ${{ inputs.environment }}
+
   execute-sit:
-    name: Execute SITs against an ephemeral application
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
-    # permissions:
-    #   contents: write
-    #   id-token: write
-    steps:
-      
-      - name: Show outputs
-        run: |
-          echo "environment=${{inputs.environment}}"
+    name: Run the SITs against a deployed application
+    needs: [ deploy-services ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      environment: ${{ inputs.environment }}
+
+  undeploy-services:
+    name: Undeploy the applicattion services
+    needs: [ execute-sit ]
+    if: always()
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      environment: ${{ inputs.environment }}

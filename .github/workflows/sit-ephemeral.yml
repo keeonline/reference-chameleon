@@ -1,4 +1,4 @@
-name: Run the System Integration Tests against an ephemeral environment
+name: Run the System Integration Tests against an ephemeral infrastructure environment
 
 on:
   workflow_dispatch:
@@ -9,15 +9,62 @@ on:
         default: test  
       
 jobs:
+  provision-infra:
+    name: Provision the infra resources
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      environment: ${{ vars.INFRA_ENVIRONMENT }}
+
+  deploy-services:
+    name: Deploy the application services
+    needs: [ provision-infra ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      environment: ${{ inputs.environment }}
+
   execute-sit:
-    name: Execute SITs against an ephemeral environment
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
-    # permissions:
-    #   contents: write
-    #   id-token: write
-    steps:
-      
-      - name: Show outputs
-        run: |
-          echo "environment=${{inputs.environment}}"
+    name: Run the SITs against a deployed application
+    needs: [ deploy-services ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      environment: ${{ inputs.environment }}
+
+  undeploy-services:
+    name: Undeploy the applicattion services
+    needs: [ execute-sit ]
+    if: always()
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      environment: ${{ inputs.environment }}
+
+  destroy-infra:
+    name: Destroy the infra resources
+    needs: [ undeploy-services ]
+    if: always()
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      environment: ${{ vars.INFRA_ENVIRONMENT }}

@@ -23,9 +23,9 @@ jobs:
       - name: Load config
         id: load_config
         run: |
-          echo "env=${{ vars.INFRA_ENVIRONMENT }}"
-          echo "repo_name=keeonline/reference-infra-aws"    
-          echo "repo_ref=bob"    
+          echo "env=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
+          echo "repo_ref=bob" >> $GITHUB_OUTPUT  
 
   provision-infra:
     name: Provision the infra resources

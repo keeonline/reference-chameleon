@@ -19,6 +19,9 @@ jobs:
     with:
       action: apply
       environment: ${{ vars.INFRA_ENVIRONMENT }}
+      checkout_repo: true
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob
 
   deploy-services:
     name: Deploy the application services
@@ -68,3 +71,6 @@ jobs:
     with:
       action: destroy
       environment: ${{ vars.INFRA_ENVIRONMENT }}
+      checkout_repo: true
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob

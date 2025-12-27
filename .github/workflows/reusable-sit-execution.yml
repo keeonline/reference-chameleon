@@ -5,7 +5,8 @@ on:
     inputs:
       environment:
         type: string
-        required: true
+        required: false
+        default: ephemeral
 
 jobs:
   sit-execution:

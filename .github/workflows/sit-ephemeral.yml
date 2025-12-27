@@ -2,11 +2,11 @@ name: Run the System Integration Tests against an ephemeral infrastructure envir
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        type: environment
-        required: false
-        default: test  
+    # inputs:
+    #   environment:
+    #     type: environment
+    #     required: false
+    #     default: test  
       
 jobs:
   # infra-config:

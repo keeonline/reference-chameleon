@@ -9,25 +9,25 @@ on:
         default: test  
       
 jobs:
-  infra-config:
-    name: Get the workflow infra config
-    runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
-    permissions:
-      id-token: write
-    outputs:
-      repo_name: ${{ steps.load_config.outputs.repo_name }}
-      repo_ref: ${{ steps.load_config.outputs.repo_ref }}
-    steps:
-      - name: Load config
-        id: load_config
-        run: |
-          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
-          echo "repo_ref=bob" >> $GITHUB_OUTPUT  
+  # infra-config:
+  #   name: Get the workflow infra config
+  #   runs-on: ubuntu-24.04
+  #   environment: ${{inputs.environment}}
+  #   permissions:
+  #     id-token: write
+  #   outputs:
+  #     repo_name: ${{ steps.load_config.outputs.repo_name }}
+  #     repo_ref: ${{ steps.load_config.outputs.repo_ref }}
+  #   steps:
+  #     - name: Load config
+  #       id: load_config
+  #       run: |
+  #         echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
+  #         echo "repo_ref=bob" >> $GITHUB_OUTPUT  
 
   provision-infra:
     name: Provision the infra resources
-    needs: [ infra-config ]
+    # needs: [ infra-config ]
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write
@@ -36,49 +36,48 @@ jobs:
     with:
       action: apply
       checkout_repo: true
-      environment: ${{inputs.environment}}
-      repo_name: ${{needs.infra-config.outputs.repo_name}}
-      repo_ref: ${{needs.infra-config.outputs.repo_ref}}
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob
 
-  deploy-services:
-    name: Deploy the application services
-    needs: [ provision-infra ]
-    uses: ./.github/workflows/reusable-manage-deployment.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      action: apply
-      environment: ${{ inputs.environment }}
+  # deploy-services:
+  #   name: Deploy the application services
+  #   needs: [ provision-infra ]
+  #   uses: ./.github/workflows/reusable-manage-deployment.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     action: apply
+  #     environment: ${{ inputs.environment }}
 
-  execute-sit:
-    name: Run the SITs against a deployed application
-    needs: [ deploy-services ]
-    uses: ./.github/workflows/reusable-sit-execution.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      environment: ${{ inputs.environment }}
+  # execute-sit:
+  #   name: Run the SITs against a deployed application
+  #   needs: [ deploy-services ]
+  #   uses: ./.github/workflows/reusable-sit-execution.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     environment: ${{ inputs.environment }}
 
-  undeploy-services:
-    name: Undeploy the applicattion services
-    needs: [ execute-sit ]
-    if: always()
-    uses: ./.github/workflows/reusable-manage-deployment.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      action: destroy
-      environment: ${{ inputs.environment }}
+  # undeploy-services:
+  #   name: Undeploy the applicattion services
+  #   needs: [ execute-sit ]
+  #   if: always()
+  #   uses: ./.github/workflows/reusable-manage-deployment.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     action: destroy
+  #     environment: ${{ inputs.environment }}
 
   destroy-infra:
     name: Destroy the infra resources
-    needs: [ infra-config, undeploy-services ]
+    needs: [ provision-infra ]
     if: always()
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
@@ -88,6 +87,5 @@ jobs:
     with:
       action: destroy
       checkout_repo: true
-      environment: ${{inputs.environment}}
-      repo_name: ${{needs.infra-config.outputs.repo_name}}
-      repo_ref: ${{needs.infra-config.outputs.repo_ref}}
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob

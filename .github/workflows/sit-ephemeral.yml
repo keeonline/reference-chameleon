@@ -26,7 +26,7 @@ jobs:
   #         echo "repo_ref=bob" >> $GITHUB_OUTPUT  
 
   provision-infra:
-    name: Provision the infra resources
+    name: Provision
     # needs: [ infra-config ]
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
@@ -40,7 +40,7 @@ jobs:
       repo_ref: bob
 
   deploy-app:
-    name: Deploy the application
+    name: Deploy
     needs: [ provision-infra ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
@@ -51,19 +51,19 @@ jobs:
       action: apply
       environment: ${{ inputs.environment }}
 
-  # execute-sit:
-  #   name: Run the SITs against a deployed application
-  #   needs: [ deploy-services ]
-  #   uses: ./.github/workflows/reusable-sit-execution.yml
-  #   permissions:
-  #     id-token: write
-  #   secrets:
-  #     inherit
-  #   with:
-  #     environment: ${{ inputs.environment }}
+  execute-sit:
+    name: Run the SITs against a deployed application
+    needs: [ provision-infra ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      environment: ${{ inputs.environment }}
 
   undeploy-app:
-    name: Undeploy the application
+    name: Undeploy
     needs: [ deploy-app ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
@@ -76,7 +76,7 @@ jobs:
       environment: ${{ inputs.environment }}
 
   destroy-infra:
-    name: Destroy the infra resources
+    name: Destroy
     needs: [ undeploy-app ]
     if: always()
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob

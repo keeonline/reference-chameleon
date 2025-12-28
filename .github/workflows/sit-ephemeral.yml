@@ -9,25 +9,30 @@ on:
         default: test  
       
 jobs:
-  # infra-config:
-  #   name: Get the workflow infra config
-  #   runs-on: ubuntu-24.04
-  #   environment: ${{inputs.environment}}
-  #   permissions:
-  #     id-token: write
-  #   outputs:
-  #     repo_name: ${{ steps.load_config.outputs.repo_name }}
-  #     repo_ref: ${{ steps.load_config.outputs.repo_ref }}
-  #   steps:
-  #     - name: Load config
-  #       id: load_config
-  #       run: |
-  #         echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
-  #         echo "repo_ref=bob" >> $GITHUB_OUTPUT  
+  sit-config:
+    name: Get SIT config
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    permissions:
+      id-token: write
+    outputs:
+      repo_name: ${{ steps.sit_config.outputs.repo_name }}
+      repo_ref: ${{ steps.sit_config.outputs.repo_ref }}
+      infra_environment: ${{ steps.sit_config.outputs.repo_name }}
+      vpc_cidr: ${{ steps.sit_config.outputs.repo_ref }}
+    steps:
+      - name: Load config
+        id: sit_config
+        run: |
+          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
+          echo "repo_ref=bob" >> $GITHUB_OUTPUT
+          THIS=$(shuf -i 201-255 -n 1)
+          echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
+          echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
 
   provision-infra:
     name: Provision
-    # needs: [ infra-config ]
+    needs: [ sit-config ]
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
       id-token: write
@@ -38,46 +43,48 @@ jobs:
       checkout_repo: true
       repo_name: keeonline/reference-infra-aws
       repo_ref: bob
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
 
-  deploy-app:
-    name: Deploy
-    needs: [ provision-infra ]
-    uses: ./.github/workflows/reusable-manage-deployment.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      action: apply
-      environment: ${{ inputs.environment }}
+  # deploy-app:
+  #   name: Deploy
+  #   needs: [ provision-infra ]
+  #   uses: ./.github/workflows/reusable-manage-deployment.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     action: apply
+  #     environment: ${{ inputs.environment }}
 
-  execute-sit:
-    name: Run the SITs against a deployed application
-    needs: [ deploy-app ]
-    uses: ./.github/workflows/reusable-sit-execution.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      environment: ${{ inputs.environment }}
+  # execute-sit:
+  #   name: Run the SITs against a deployed application
+  #   needs: [ deploy-app ]
+  #   uses: ./.github/workflows/reusable-sit-execution.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     environment: ${{ inputs.environment }}
 
-  undeploy-app:
-    name: Undeploy
-    needs: [ execute-sit ]
-    if: always()
-    uses: ./.github/workflows/reusable-manage-deployment.yml
-    permissions:
-      id-token: write
-    secrets:
-      inherit
-    with:
-      action: destroy
-      environment: ${{ inputs.environment }}
+  # undeploy-app:
+  #   name: Undeploy
+  #   needs: [ execute-sit ]
+  #   if: always()
+  #   uses: ./.github/workflows/reusable-manage-deployment.yml
+  #   permissions:
+  #     id-token: write
+  #   secrets:
+  #     inherit
+  #   with:
+  #     action: destroy
+  #     environment: ${{ inputs.environment }}
 
   destroy-infra:
     name: Destroy
-    needs: [ undeploy-app ]
+    needs: [ sit-config, provision-infra ]
     if: always()
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:
@@ -89,3 +96,5 @@ jobs:
       checkout_repo: true
       repo_name: keeonline/reference-infra-aws
       repo_ref: bob
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}

@@ -73,7 +73,7 @@ jobs:
 
   undeploy-app:
     name: Undeploy
-    needs: [ sit-config, deploy-app ]
+    needs: [ sit-config, execute-sit ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:

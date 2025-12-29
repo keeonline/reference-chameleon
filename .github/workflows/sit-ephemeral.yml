@@ -88,7 +88,7 @@ jobs:
 
   destroy-infra:
     name: Destroy
-    needs: [ sit-config, provision-infra ]
+    needs: [ sit-config, undeploy-app ]
     if: always()
     uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
     permissions:

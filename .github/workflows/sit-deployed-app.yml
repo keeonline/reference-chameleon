@@ -13,15 +13,11 @@ jobs:
     name: Get config
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    permissions:
-      id-token: write
     outputs:
       infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
     steps:
       - name: Determine values
-        # id: sit_config
-        run: |
-          echo ""
+        run: echo ""
 
   execute-sit:
     name: Run the SITs against a deployed application

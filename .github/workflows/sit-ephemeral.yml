@@ -13,17 +13,15 @@ jobs:
     name: Get infra config
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    permissions:
-      id-token: write
     outputs:
-      repo_name: ${{ steps.sit_config.outputs.repo_name }}
-      repo_ref: ${{ steps.sit_config.outputs.repo_ref }}
-      infra_environment: ${{ steps.sit_config.outputs.infra_environment }}
-      vpc_cidr: ${{ steps.sit_config.outputs.vpc_cidr }}
+      repo_name: ${{ steps.values.outputs.repo_name }}
+      repo_ref: ${{ steps.values.outputs.repo_ref }}
+      infra_environment: ${{ steps.values.outputs.infra_environment }}
+      vpc_cidr: ${{ steps.values.outputs.vpc_cidr }}
       base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}
     steps:
-      - name: Load config
-        id: sit_config
+      - name: Determine values
+        id: values
         run: |
           echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
           echo "repo_ref=bob" >> $GITHUB_OUTPUT

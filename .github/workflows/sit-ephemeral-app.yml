@@ -13,19 +13,13 @@ jobs:
     name: Get config
     runs-on: ubuntu-24.04
     environment: ${{inputs.environment}}
-    permissions:
-      id-token: write
     outputs:
-      infra_environment: ${{ steps.sit_config.outputs.infra_environment }}
-      az_use_count: ${{ steps.sit_config.outputs.az_use_count }}
-      base_alb_listener_rule_priority: ${{ steps.sit_config.outputs.base_alb_listener_rule_priority }}
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+      az_use_count: ${{ vars.AZ_USE_COUNT }}
+      base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}
     steps:
       - name: Determine values
-        id: sit_config
-        run: |
-          echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
-          echo "az_use_count=${{ vars.AZ_USE_COUNT }}" >> $GITHUB_OUTPUT
-          echo "base_alb_listener_rule_priority=${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}" >> $GITHUB_OUTPUT
+        run: echo ""
 
   deploy-app:
     name: Deploy the application

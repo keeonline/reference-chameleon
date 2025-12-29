@@ -65,7 +65,6 @@ jobs:
       inherit
     with:
       action: destroy
-      environment: ${{ inputs.environment }}
       app_environment: ${{ inputs.environment }}
       infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
       az_use_count: ${{ needs.sit-config.outputs.az_use_count }}

@@ -16,12 +16,12 @@ jobs:
     permissions:
       id-token: write
     outputs:
-      infra_environment: ${{ steps.sit_config.outputs.infra_environment }}
-    steps:
-      - name: Determine values
-        id: sit_config
-        run: |
-          echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+    # steps:
+    #   - name: Determine values
+    #     id: sit_config
+    #     run: |
+    #       echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
 
   execute-sit:
     name: Run the SITs against a deployed application

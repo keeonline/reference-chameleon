@@ -27,8 +27,8 @@ jobs:
           echo "az_use_count=${{ vars.AZ_USE_COUNT }}" >> $GITHUB_OUTPUT
           echo "base_alb_listener_rule_priority=${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}" >> $GITHUB_OUTPUT
 
-  deploy-services:
-    name: Deploy the application services
+  deploy-app:
+    name: Deploy the application
     needs: [ sit-config ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
@@ -44,7 +44,7 @@ jobs:
 
   execute-sit:
     name: Run the SITs against a deployed application
-    needs: [ sit-config, deploy-services ]
+    needs: [ sit-config, deploy-app ]
     uses: ./.github/workflows/reusable-sit-execution.yml
     permissions:
       id-token: write
@@ -54,8 +54,8 @@ jobs:
       app_environment: ${{ inputs.environment }}
       infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
 
-  undeploy-services:
-    name: Undeploy the application services
+  undeploy-app:
+    name: Undeploy the application
     needs: [ sit-config, execute-sit ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml

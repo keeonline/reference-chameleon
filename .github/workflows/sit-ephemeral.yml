@@ -20,6 +20,7 @@ jobs:
       repo_ref: ${{ steps.sit_config.outputs.repo_ref }}
       infra_environment: ${{ steps.sit_config.outputs.infra_environment }}
       vpc_cidr: ${{ steps.sit_config.outputs.vpc_cidr }}
+      base_alb_listener_rule_priority: ${{ steps.sit_config.outputs.base_alb_listener_rule_priority }}
     steps:
       - name: Load config
         id: sit_config
@@ -29,6 +30,7 @@ jobs:
           THIS=$(shuf -i 201-255 -n 1)
           echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
           echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
+          echo "base_alb_listener_rule_priority=1$THIS0" >> $GITHUB_OUTPUT
 
   provision-infra:
     name: Provision
@@ -48,7 +50,7 @@ jobs:
 
   deploy-app:
     name: Deploy
-    needs: [ provision-infra ]
+    needs: [ sit-config, provision-infra ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -56,7 +58,9 @@ jobs:
       inherit
     with:
       action: apply
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
 
   # execute-sit:
   #   name: Run the SITs against a deployed application
@@ -69,18 +73,19 @@ jobs:
   #   with:
   #     environment: ${{ inputs.environment }}
 
-  # undeploy-app:
-  #   name: Undeploy
-  #   needs: [ execute-sit ]
-  #   if: always()
-  #   uses: ./.github/workflows/reusable-manage-deployment.yml
-  #   permissions:
-  #     id-token: write
-  #   secrets:
-  #     inherit
-  #   with:
-  #     action: destroy
-  #     environment: ${{ inputs.environment }}
+  undeploy-app:
+    name: Undeploy
+    needs: [ sit-config, deploy-app ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
 
   destroy-infra:
     name: Destroy

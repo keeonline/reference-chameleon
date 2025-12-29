@@ -59,20 +59,22 @@ jobs:
       infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
       base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
 
-  # execute-sit:
-  #   name: Run the SITs against a deployed application
-  #   needs: [ deploy-app ]
-  #   uses: ./.github/workflows/reusable-sit-execution.yml
-  #   permissions:
-  #     id-token: write
-  #   secrets:
-  #     inherit
-  #   with:
-  #     environment: ${{ inputs.environment }}
+  execute-sit:
+    name: Run the SITs against a deployed application
+    needs: [ sit-config, deploy-app ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
 
   undeploy-app:
     name: Undeploy
     needs: [ sit-config, deploy-app ]
+    if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write

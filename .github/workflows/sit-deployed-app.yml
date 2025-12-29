@@ -17,11 +17,12 @@ jobs:
       id-token: write
     outputs:
       infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
-    # steps:
-    #   - name: Determine values
-    #     id: sit_config
-    #     run: |
-    #       echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+    steps:
+      - name: Determine values
+        # id: sit_config
+        run: |
+          # echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo ""
 
   execute-sit:
     name: Run the SITs against a deployed application

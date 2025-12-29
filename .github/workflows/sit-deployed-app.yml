@@ -21,7 +21,6 @@ jobs:
       - name: Determine values
         # id: sit_config
         run: |
-          # echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
           echo ""
 
   execute-sit:

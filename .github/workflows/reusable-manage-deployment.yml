@@ -41,10 +41,12 @@ jobs:
         id: versions
         uses: keeonline/gh-actions/actions/artifact-version@v0.0.5
 
-      - name: Show ref
+      - name: Show stuff
         shell: bash
         run: |
-          echo "ref=${{ github.ref_type }}"
+          echo "ref_type=${{ github.ref_type }}"
+          echo "branch=${{steps.versions.outputs.branch}}"
+          echo "release=${{steps.versions.outputs.release}}"
 
       - name: Set the application version
         id: app_version

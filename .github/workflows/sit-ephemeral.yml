@@ -46,17 +46,17 @@ jobs:
       environment: ${{ needs.sit-config.outputs.infra_environment }}
       vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
 
-  # deploy-app:
-  #   name: Deploy
-  #   needs: [ provision-infra ]
-  #   uses: ./.github/workflows/reusable-manage-deployment.yml
-  #   permissions:
-  #     id-token: write
-  #   secrets:
-  #     inherit
-  #   with:
-  #     action: apply
-  #     environment: ${{ inputs.environment }}
+  deploy-app:
+    name: Deploy
+    needs: [ provision-infra ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      environment: ${{ inputs.environment }}
 
   # execute-sit:
   #   name: Run the SITs against a deployed application

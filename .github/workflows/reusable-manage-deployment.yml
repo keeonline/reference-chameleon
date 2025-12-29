@@ -6,23 +6,32 @@ on:
       action:
         type: string
         required: true
-      environment:
+      app_environment:
         type: string
+        required: true
+      infra_environment:
+        type: string
+        required: true
+      az_use_count:
+        type: number
         required: false
-        default: ephemeral
+        default: 2
+      base_alb_listener_rule_priority:
+        type: number
+        required: true
 
 jobs:
-  manage-deployment-resources:
-    name: Manage deployment resources
+  manage-deployment:
+    name: Manage deployment
     runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
+    environment: ${{inputs.app_environment}}
     permissions:
       id-token: write
     steps:
       - name: Output values
         run: |
           echo "action=${{inputs.action}}"
-          echo "environment=${{inputs.environment}}"
+          echo "environment=${{inputs.app_environment}}"
 
       - name: Get the artefact version values
         id: versions
@@ -42,15 +51,15 @@ jobs:
       - name: Terraform action
         uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.5
         env:
-          TF_VAR_app_environment: ${{inputs.environment}}
+          TF_VAR_app_environment: ${{inputs.app_environment}}
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}
           TF_VAR_app_repo: ${{github.repository}}
-          TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
-          TF_VAR_base_alb_listener_rule_priority: ${{vars.BASE_ALB_LISTENER_RULE_PRIORITY}}
-          TF_VAR_az_use_count: ${{vars.AZ_USE_COUNT}}
+          TF_VAR_infra_environment: ${{inputs.infra_environment}}
+          TF_VAR_base_alb_listener_rule_priority: ${{inputs.base_alb_listener_rule_priority}}
+          TF_VAR_az_use_count: ${{inputs.az_use_count}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
           action: ${{inputs.action}}
-          environment: ${{inputs.environment}}
+          environment: ${{inputs.app_environment}}
           tfdir: deploy/aws

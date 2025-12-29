@@ -18,8 +18,27 @@ on:
         default: test
 
 jobs:
+  deploy-config:
+    name: Get config
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    permissions:
+      id-token: write
+    outputs:
+      infra_environment: ${{ steps.deploy_config.outputs.infra_environment }}
+      az_use_count: ${{ steps.deploy_config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ steps.deploy_config.outputs.base_alb_listener_rule_priority }}
+    steps:
+      - name: Determine values
+        id: deploy_config
+        run: |
+          echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "az_use_count=${{ vars.AZ_USE_COUNT }}" >> $GITHUB_OUTPUT
+          echo "base_alb_listener_rule_priority=${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}" >> $GITHUB_OUTPUT
+
   manage-deployment:
     name: Manage deployment
+    needs: [ deploy-config ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -28,3 +47,6 @@ jobs:
     with:
       action: ${{ inputs.action }}
       environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.deploy-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.deploy-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.deploy-config.outputs.base_alb_listener_rule_priority }}

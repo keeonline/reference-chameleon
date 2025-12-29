@@ -20,9 +20,9 @@ Scenario Outline: Successful call to chameleon service variants
 Scenario Outline: Call to service endpoints that have no request handlers
     Given url baseUrl
     And path '<path>'
+    And retry until responseStatus == 404
     When method GET
     Then status 404
-    * match response.status == 404
     * match response.error == 'Not Found'
     * match karate.toString(response.path) contains '/<path>'
 

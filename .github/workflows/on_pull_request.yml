@@ -4,9 +4,97 @@ on:
   pull_request:
   
 jobs:
-  salutation:
-      runs-on: ubuntu-24.04
-      steps:
-        - name: salutation
-          run: |
-            echo This is on_pull_request for chameleon service
+  sit-config:
+    name: Get infra config
+    runs-on: ubuntu-24.04
+    outputs:
+      app_environment: pullrequest
+      repo_name: ${{ steps.values.outputs.repo_name }}
+      repo_ref: ${{ steps.values.outputs.repo_ref }}
+      infra_environment: ${{ steps.values.outputs.infra_environment }}
+      vpc_cidr: ${{ steps.values.outputs.vpc_cidr }}
+      base_alb_listener_rule_priority: ${{ steps.values.outputs.base_alb_listener_rule_priority }}
+    steps:
+      - name: Determine values
+        id: values
+        run: |
+          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
+          echo "repo_ref=bob" >> $GITHUB_OUTPUT
+          THIS=$(shuf -i 201-255 -n 1)
+          echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
+          echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
+          echo "base_alb_listener_rule_priority=1$THIS0" >> $GITHUB_OUTPUT
+
+  provision-infra:
+    name: Provision
+    needs: [ sit-config ]
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      checkout_repo: true
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
+
+  deploy-app:
+    name: Deploy
+    needs: [ sit-config, provision-infra ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
+
+  execute-sit:
+    name: Run the SITs against a deployed application
+    needs: [ sit-config, deploy-app ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
+
+  undeploy-app:
+    name: Undeploy
+    needs: [ sit-config, execute-sit ]
+    if: always()
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
+
+  destroy-infra:
+    name: Destroy
+    needs: [ sit-config, undeploy-app ]
+    if: always()
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@bob
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      checkout_repo: true
+      repo_name: keeonline/reference-infra-aws
+      repo_ref: bob
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}

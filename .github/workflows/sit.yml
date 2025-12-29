@@ -25,7 +25,7 @@ jobs:
     steps:
       
       - name: Provision cloud infrastructure
-        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.5
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.21
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{vars.AWS_REGION}}
@@ -56,7 +56,7 @@ jobs:
           fi
 
       - name: Deploy application
-        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.5
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.21
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}
         with:
@@ -101,7 +101,7 @@ jobs:
           path: sit/karate/target/karate-reports
 
       - name: Undeploy application
-        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.5
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.21
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:
@@ -112,7 +112,7 @@ jobs:
           environment: ${{inputs.environment}}
             
       - name: Destroy cloud infrastructure
-        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.5
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.21
         env:
           TF_VAR_app_version: ${{steps.app_version.outputs.version}}
         with:

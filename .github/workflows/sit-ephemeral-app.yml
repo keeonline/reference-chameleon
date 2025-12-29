@@ -17,14 +17,19 @@ jobs:
       id-token: write
     outputs:
       infra_environment: ${{ steps.sit_config.outputs.infra_environment }}
+      az_use_count: ${{ steps.sit_config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ steps.sit_config.outputs.base_alb_listener_rule_priority }}
     steps:
       - name: Determine values
         id: sit_config
         run: |
           echo "infra_environment=${{ vars.INFRA_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "az_use_count=${{ vars.AZ_USE_COUNT }}" >> $GITHUB_OUTPUT
+          echo "base_alb_listener_rule_priority=${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}" >> $GITHUB_OUTPUT
 
   deploy-services:
     name: Deploy the application services
+    needs: [ sit-config ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -32,7 +37,10 @@ jobs:
       inherit
     with:
       action: apply
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.sit-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
 
   execute-sit:
     name: Run the SITs against a deployed application
@@ -48,7 +56,7 @@ jobs:
 
   undeploy-services:
     name: Undeploy the application services
-    needs: [ execute-sit ]
+    needs: [ sit-config, execute-sit ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
@@ -58,3 +66,7 @@ jobs:
     with:
       action: destroy
       environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.sit-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}

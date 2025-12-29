@@ -24,7 +24,7 @@ jobs:
         id: values
         run: |
           echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
-          echo "repo_ref=bob" >> $GITHUB_OUTPUT
+          echo "repo_ref=v0.0.57" >> $GITHUB_OUTPUT
           THIS=$(shuf -i 201-255 -n 1)
           echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
           echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
@@ -40,8 +40,8 @@ jobs:
     with:
       action: apply
       checkout_repo: true
-      repo_name: keeonline/reference-infra-aws
-      repo_ref: bob
+      repo_name: ${{ needs.sit-config.outputs.repo_name }}
+      repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
       environment: ${{ needs.sit-config.outputs.infra_environment }}
       vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
 
@@ -98,7 +98,7 @@ jobs:
     with:
       action: destroy
       checkout_repo: true
-      repo_name: keeonline/reference-infra-aws
-      repo_ref: bob
+      repo_name: ${{ needs.sit-config.outputs.repo_name }}
+      repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
       environment: ${{ needs.sit-config.outputs.infra_environment }}
       vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}

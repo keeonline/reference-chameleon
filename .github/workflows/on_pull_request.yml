@@ -8,10 +8,10 @@ jobs:
     name: Get infra config
     runs-on: ubuntu-24.04
     outputs:
-      app_environment: pullrequest
+      app_environment: ${{ steps.values.outputs.this_environment }}
       repo_name: ${{ steps.values.outputs.repo_name }}
       repo_ref: ${{ steps.values.outputs.repo_ref }}
-      infra_environment: ${{ steps.values.outputs.infra_environment }}
+      infra_environment: ${{ steps.values.outputs.this_environment }}
       vpc_cidr: ${{ steps.values.outputs.vpc_cidr }}
     steps:
       - name: Determine values
@@ -20,7 +20,7 @@ jobs:
           echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
           echo "repo_ref=v0.0.57" >> $GITHUB_OUTPUT
           THIS=$(shuf -i 201-255 -n 1)
-          echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
+          echo "this_environment=eph$THIS" >> $GITHUB_OUTPUT
           echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
 
   provision-infra:

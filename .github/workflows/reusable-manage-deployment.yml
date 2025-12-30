@@ -6,6 +6,10 @@ on:
       action:
         type: string
         required: true
+      github_ref:
+        type: string
+        required: false
+        default: ${{github.ref}}
       app_environment:
         type: string
         required: true
@@ -39,6 +43,8 @@ jobs:
       - name: Get the artefact version values
         id: versions
         uses: keeonline/gh-actions/actions/artifact-version@v0.0.5
+        with:
+          github_ref: ${{ inputs.github_ref }}
 
       - name: Show stuff
         shell: bash

@@ -25,7 +25,6 @@ jobs:
   manage-deployment:
     name: Manage deployment
     runs-on: ubuntu-24.04
-    environment: ${{inputs.app_environment}}
     permissions:
       id-token: write
     steps:

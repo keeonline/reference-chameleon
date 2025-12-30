@@ -3,7 +3,10 @@ name: Reusable SIT execution
 on:
   workflow_call:
     inputs:
-      environment:
+      app_environment:
+        type: string
+        required: true
+      infra_environment:
         type: string
         required: true
 
@@ -11,13 +14,13 @@ jobs:
   sit-execution:
     name: Execute SITs
     runs-on: ubuntu-24.04
-    environment: ${{inputs.environment}}
     permissions:
       id-token: write
     steps:
             - name: Show inputs
               run: |
-                  echo "environment=${{inputs.environment}}"
+                  echo "app_environment=${{inputs.app_environment}}"
+                  echo "infra_environment=${{inputs.infra_environment}}"
 
             - name: Configure credentials
               uses: aws-actions/configure-aws-credentials@v4
@@ -29,7 +32,7 @@ jobs:
               id: alb_dns
               run: |
                 ALB=$(aws elbv2 describe-load-balancers \
-                  --names ${{vars.INFRA_ENVIRONMENT}}-alb \
+                  --names ${{inputs.infra_environment}}-alb \
                   --query 'LoadBalancers[*].[DNSName]' \
                   --output text)
                 echo "value=$ALB" >> $GITHUB_OUTPUT
@@ -44,4 +47,4 @@ jobs:
               with:
                 tests_directory: sit/karate
                 reports_upload_title: System Integration Test Reports
-                baseurl: http://${{steps.alb_dns.outputs.value}}/${{inputs.environment}}
+                baseurl: http://${{steps.alb_dns.outputs.value}}/${{inputs.app_environment}}

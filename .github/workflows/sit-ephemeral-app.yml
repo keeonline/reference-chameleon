@@ -9,8 +9,21 @@ on:
         default: test  
       
 jobs:
-  deploy-services:
-    name: Deploy the application services
+  sit-config:
+    name: Get config
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    outputs:
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+      az_use_count: ${{ vars.AZ_USE_COUNT }}
+      base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}
+    steps:
+      - name: Determine values
+        run: echo ""
+
+  deploy-app:
+    name: Deploy the application
+    needs: [ sit-config ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -18,22 +31,26 @@ jobs:
       inherit
     with:
       action: apply
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.sit-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}
 
   execute-sit:
     name: Run the SITs against a deployed application
-    needs: [ deploy-services ]
+    needs: [ sit-config, deploy-app ]
     uses: ./.github/workflows/reusable-sit-execution.yml
     permissions:
       id-token: write
     secrets:
       inherit
     with:
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
 
-  undeploy-services:
-    name: Undeploy the applicattion services
-    needs: [ execute-sit ]
+  undeploy-app:
+    name: Undeploy the application
+    needs: [ sit-config, execute-sit ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
@@ -42,4 +59,7 @@ jobs:
       inherit
     with:
       action: destroy
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.sit-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.sit-config.outputs.base_alb_listener_rule_priority }}

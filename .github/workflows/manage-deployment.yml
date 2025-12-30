@@ -15,11 +15,24 @@ on:
       environment:
         type: environment
         required: false
-        default: dev1
+        default: test
 
 jobs:
+  deploy-config:
+    name: Get config
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    outputs:
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+      az_use_count: ${{ vars.AZ_USE_COUNT }}
+      base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}
+    steps:
+      - name: Determine values
+        run: echo ""
+
   manage-deployment:
     name: Manage deployment
+    needs: [ deploy-config ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -27,4 +40,7 @@ jobs:
       inherit
     with:
       action: ${{ inputs.action }}
-      environment: ${{ inputs.environment }}
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.deploy-config.outputs.infra_environment}}
+      az_use_count: ${{ needs.deploy-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.deploy-config.outputs.base_alb_listener_rule_priority }}

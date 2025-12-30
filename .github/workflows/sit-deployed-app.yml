@@ -5,16 +5,28 @@ on:
         inputs:
             environment:
                 type: environment
-                required: false
+                required: true
                 default: test
 
 jobs:
-    execute-sit:
-      name: Run the SITs against a deployed application
-      uses: ./.github/workflows/reusable-sit-execution.yml
-      permissions:
-        id-token: write
-      secrets:
-        inherit
-      with:
-        environment: ${{ inputs.environment }}
+  sit-config:
+    name: Get config
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    outputs:
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+    steps:
+      - name: Determine values
+        run: echo ""
+
+  execute-sit:
+    name: Run the SITs against a deployed application
+    needs: [ sit-config ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      app_environment: ${{ inputs.environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}

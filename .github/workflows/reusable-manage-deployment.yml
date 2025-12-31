@@ -27,7 +27,7 @@ on:
 
 jobs:
   manage-deployment:
-    name: Manage deployment
+    name: Manage deployment (${{inputs.action}})
     runs-on: ubuntu-24.04
     permissions:
       id-token: write

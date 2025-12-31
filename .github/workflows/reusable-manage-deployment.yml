@@ -6,6 +6,10 @@ on:
       action:
         type: string
         required: true
+      github_ref:
+        type: string
+        required: false
+        default: ${{github.ref}}
       app_environment:
         type: string
         required: true
@@ -23,7 +27,7 @@ on:
 
 jobs:
   manage-deployment:
-    name: Manage deployment
+    name: Manage deployment (${{inputs.action}})
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
@@ -38,7 +42,9 @@ jobs:
 
       - name: Get the artefact version values
         id: versions
-        uses: keeonline/gh-actions/actions/artifact-version@v0.0.5
+        uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.22
+        with:
+          github_ref: ${{ inputs.github_ref }}
 
       - name: Show stuff
         shell: bash
@@ -59,7 +65,7 @@ jobs:
           fi
 
       - name: Terraform action
-        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.21
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.22
         env:
           TF_VAR_app_environment: ${{inputs.app_environment}}
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}

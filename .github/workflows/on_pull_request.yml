@@ -26,7 +26,7 @@ jobs:
   provision-infra:
     name: Provision
     needs: [ sit-config ]
-    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.57
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.58
     permissions:
       id-token: write
     secrets:
@@ -84,7 +84,7 @@ jobs:
     name: Destroy
     needs: [ sit-config, undeploy-app ]
     if: always()
-    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.57
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.58
     permissions:
       id-token: write
     secrets:

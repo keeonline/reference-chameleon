@@ -22,7 +22,7 @@ jobs:
         id: values
         run: |
           echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
-          echo "repo_ref=v0.0.57" >> $GITHUB_OUTPUT
+          echo "repo_ref=bob" >> $GITHUB_OUTPUT
           THIS=$(shuf -i 201-255 -n 1)
           echo "infra_environment=eph$THIS" >> $GITHUB_OUTPUT
           echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT

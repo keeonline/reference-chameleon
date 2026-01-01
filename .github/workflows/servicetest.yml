@@ -11,7 +11,7 @@ jobs:
 
       - name: Get the application artifact version
         id: versions
-        uses: keeonline/github-actions/actions/artifact-version@feature-tfcmd
+        uses: keeonline/gh-actions/actions/artifact-version@feature-tfcmd
 
       # - name: Install docker compose
       #   run: |

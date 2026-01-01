@@ -42,7 +42,7 @@ jobs:
 
       - name: Get the artefact version values
         id: versions
-        uses: keeonline/ghub-actions/actions/artifact-version@feature-tfcmd
+        uses: keeonline/github-actions/actions/artifact-version@feature-tfcmd
         with:
           github_ref: ${{ inputs.github_ref }}
 
@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Terraform action
-        uses: keeonline/ghub-actions/actions/terraform-cmd@feature-tfcmd
+        uses: keeonline/github-actions/actions/terraform-cmd@feature-tfcmd
         env:
           TF_VAR_app_environment: ${{inputs.app_environment}}
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}

@@ -42,7 +42,7 @@ jobs:
 
       - name: Get the artefact version values
         id: versions
-        uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.22
+        uses: keeonline/gh-actions/actions/artifact-version@v0.0.6
         with:
           github_ref: ${{ inputs.github_ref }}
 

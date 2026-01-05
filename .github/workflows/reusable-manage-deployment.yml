@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Terraform action
-        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.22
+        uses: keeonline/gh-actions/actions/terraform-cmd@v0.0.6
         env:
           TF_VAR_app_environment: ${{inputs.app_environment}}
           TF_VAR_app_version: ${{steps.app_version.outputs.value}}

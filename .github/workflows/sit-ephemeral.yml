@@ -12,6 +12,7 @@ jobs:
   sit-config:
     name: Get infra config
     runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
     outputs:
       az_use_count: ${{ vars.AZ_USE_COUNT }}
       base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}

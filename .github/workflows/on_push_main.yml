@@ -31,7 +31,7 @@ jobs:
 
         - name: Get the application artifact version
           id: versions
-          uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.22
+          uses: keeonline/gh-actions/actions/artifact-version@v0.0.6
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon

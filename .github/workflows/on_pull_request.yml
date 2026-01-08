@@ -22,11 +22,6 @@ jobs:
           THIS=$(shuf -i 201-255 -n 1)
           echo "this_environment=eph$THIS" >> $GITHUB_OUTPUT
           echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
-      
-      - name: Show repo_ref
-        run: |
-          REF=${{ github.head_ref }}
-          echo "github_ref=$REF"
 
   provision-infra:
     name: Provision

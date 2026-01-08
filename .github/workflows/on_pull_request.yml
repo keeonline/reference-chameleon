@@ -31,7 +31,7 @@ jobs:
   provision-infra:
     name: Provision
     needs: [ sit-config ]
-    uses: keeonline/infra-aws/.github/workflows/reusable-manage-infra.yml@fandango
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@fandango
     permissions:
       id-token: write
     secrets:

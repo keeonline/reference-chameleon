@@ -33,7 +33,6 @@ jobs:
       inherit
     with:
       action: apply-plan
-      checkout_repo: true
       repo_name: ${{ needs.sit-config.outputs.repo_name }}
       repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
       environment: ${{ needs.sit-config.outputs.infra_environment }}
@@ -91,7 +90,6 @@ jobs:
   #     inherit
   #   with:
   #     action: destroy
-  #     checkout_repo: true
   #     repo_name: ${{ needs.sit-config.outputs.repo_name }}
   #     repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
   #     environment: ${{ needs.sit-config.outputs.infra_environment }}

@@ -32,7 +32,7 @@ jobs:
     secrets:
       inherit
     with:
-      action: apply-plan
+      action: apply
       repo_name: ${{ needs.sit-config.outputs.repo_name }}
       repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
       environment: ${{ needs.sit-config.outputs.infra_environment }}

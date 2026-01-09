@@ -48,7 +48,7 @@ jobs:
       inherit
     with:
       action: apply
-      github_ref: ${{ github.head_ref }}
+      repo_ref: ${{ github.head_ref }}
       app_environment: ${{ needs.sit-config.outputs.app_environment }}
       infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
 
@@ -75,7 +75,7 @@ jobs:
       inherit
     with:
       action: destroy
-      github_ref: ${{ github.head_ref }}
+      repo_ref: ${{ github.head_ref }}
       app_environment: ${{ needs.sit-config.outputs.app_environment }}
       infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
 

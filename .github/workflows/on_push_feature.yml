@@ -1,121 +1,60 @@
-name: Push to feature branch
+name: Push on Feature Branch
 
-on:
-  push:
-    branches:
-      - '**'
-      - '!main'
+on: 
+    push:
+        branches:
+            - '**'
+            - '!main'
 
 jobs:
-  build-application:
-      name: Build Application
-      runs-on: ubuntu-24.04
-      permissions:
-        contents: write
-      steps:
+    feature-push:
+        name: Build snapshot version
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Get the artifact version
+              id: version
+              uses: keeonline/reference-github-actions/actions/artifact-version@tags
 
-        - name: Setup Java
-          uses: actions/setup-java@v4
-          with:
-            distribution: 'temurin'
-            java-version: 21
+            - name: Build the application
+              uses: keeonline/reference-github-actions/actions/java-build@tags
+              with:
+                artifact_version: ${{steps.version.outputs.value}}
 
-        - name: Setup Gradle            
-          uses: gradle/actions/setup-gradle@v4
-
-        - name: Get the application artifact version
-          id: versions
-          uses: keeonline/reference-github-actions/actions/artifact-version@tags
-
-        - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.versions.outputs.branch}} build --no-daemon
-
-        - name: Show build outputs
-          run: |
-            ls -lsa build/libs
-
-        - name: Upload build reports
-          uses: actions/upload-artifact@v4
-          with:
-            name: Build Reports
-            path: build/reports
-
-        - name: Build image
-          run: | 
-            docker build --build-arg VERSION=${{steps.versions.outputs.branch}} \
-                         -t chameleon:${{steps.versions.outputs.branch}} \
-                         .  
-
-        - name: List image 
-          run: | 
-            docker image ls chameleon:${{steps.versions.outputs.branch}}
-
-        - name: Inspect image
-          run: | 
-            docker inspect --type=image chameleon:${{steps.versions.outputs.branch}}
-
-        - name: Setup docker compose (https://docs.docker.com/compose/install/standalone/)
-          run: |
-            curl -SL https://github.com/docker/compose/releases/download/v2.39.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-            docker-compose --version
-
-        # - name: Setup docker compose
-        #   run: |
-        #     curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        #     chmod +x /usr/local/bin/docker-compose
-        #     docker-compose --version
-
-        - name: Create docker compose environment file
-          working-directory: servicetest
-          run: | 
-            echo "VERSION=${{steps.versions.outputs.branch}}" >> .env
-            cat .env          
-                  
-        - name: Start the chameleon container
-          working-directory: servicetest
-          run: |
-            docker-compose up -d
-            sleep 5
-
-        - name: Setup karate
-          run: |
-            wget -O /opt/karate.jar https://github.com/karatelabs/karate/releases/download/v1.5.1/karate-1.5.1.jar
-    
-        - name: Execute the service tests using karate
-          working-directory: servicetest/karate
-          run: |
-            java -jar /opt/karate.jar .
-                
-        - name: Upload service test reports
-          uses: actions/upload-artifact@v4
-          with:
-            name: Service Test Reports
-            path: servicetest/karate/target/karate-reports
-    
-        - name: Stop and remove the containers   
-          if: always()
-          working-directory: servicetest
-          run: |
-            docker-compose down 
-        
-        - name: Login to Docker registry
-          uses: docker/login-action@v3
-          with:
-            username: ${{vars.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_TOKEN}}
+            - name: Package the application as an image
+              uses: keeonline/reference-github-actions/actions/docker-build@tags
+              with:
+                image: chameleon
+                artifact_version: ${{steps.version.outputs.value}}
             
-        - name: Tag image
-          run: |
-            docker tag chameleon:${{steps.versions.outputs.branch}} \
-                       ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
+            - name: Setup docker compose
+              uses: keeonline/reference-github-actions/actions/setup-docker-compose@tags
+              with:
+                version: 2.39.1
 
-        - name: List chameleon images
-          run: |
-            docker images | grep chameleon
+            - name: Start the chameleon service
+              working-directory: servicetest/karate
+              run: |
+                echo "VERSION=${{steps.version.outputs.value}}" >> .env
+                cat .env
+                docker-compose up -d
+                sleep 5
 
-        - name: Publish image
-          run: |
-            docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.branch}}
+            - name: Execute the service tests
+              uses: keeonline/reference-github-actions/actions/karate-tests@tags
+              with:
+                tests_directory: servicetest/karate
+                reports_upload_title: Service Test Reports
 
-    
+            - name: Stop the chameleon service
+              if: always()
+              working-directory: servicetest/karate
+              run: |
+                docker-compose down
+
+            - name: Publish the image
+              uses: keeonline/reference-github-actions/actions/dockerhub-publish@tags
+              with:
+                username: ${{vars.DOCKERHUB_USERNAME}}
+                password: ${{secrets.DOCKERHUB_TOKEN}}
+                source_image: chameleon:${{steps.version.outputs.value}}
+                target_image: ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}

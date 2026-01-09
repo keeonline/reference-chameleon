@@ -43,12 +43,12 @@ jobs:
 
       - name: Get the artefact version
         id: version
-        uses: keeonline/reference-github-actions/actions/artifact-version@tags
+        uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.26
         with:
           repo_ref: ${{ inputs.repo_ref }}
 
       - name: Terraform action
-        uses: keeonline/reference-github-actions/actions/terraform-cmd@tags
+        uses: keeonline/reference-github-actions/actions/terraform-cmd@v0.0.26
         env:
           TF_VAR_app_environment: ${{inputs.app_environment}}
           TF_VAR_app_version: ${{steps.version.outputs.value}}

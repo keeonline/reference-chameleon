@@ -13,21 +13,21 @@ jobs:
         steps:
             - name: Get the artifact version
               id: version
-              uses: keeonline/reference-github-actions/actions/artifact-version@tags
+              uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.26
 
             - name: Build the application
-              uses: keeonline/reference-github-actions/actions/java-build@tags
+              uses: keeonline/reference-github-actions/actions/java-build@v0.0.26
               with:
                 artifact_version: ${{steps.version.outputs.value}}
 
             - name: Package the application as an image
-              uses: keeonline/reference-github-actions/actions/docker-build@tags
+              uses: keeonline/reference-github-actions/actions/docker-build@v0.0.26
               with:
                 image: chameleon
                 artifact_version: ${{steps.version.outputs.value}}
             
             - name: Setup docker compose
-              uses: keeonline/reference-github-actions/actions/setup-docker-compose@tags
+              uses: keeonline/reference-github-actions/actions/setup-docker-compose@v0.0.26
               with:
                 version: 2.39.1
 
@@ -40,7 +40,7 @@ jobs:
                 sleep 5
 
             - name: Execute the service tests
-              uses: keeonline/reference-github-actions/actions/karate-tests@tags
+              uses: keeonline/reference-github-actions/actions/karate-tests@v0.0.26
               with:
                 tests_directory: servicetest/karate
                 reports_upload_title: Service Test Reports
@@ -52,7 +52,7 @@ jobs:
                 docker-compose down
 
             - name: Publish the image
-              uses: keeonline/reference-github-actions/actions/dockerhub-publish@tags
+              uses: keeonline/reference-github-actions/actions/dockerhub-publish@v0.0.26
               with:
                 username: ${{vars.DOCKERHUB_USERNAME}}
                 password: ${{secrets.DOCKERHUB_TOKEN}}

@@ -11,15 +11,6 @@ jobs:
       permissions:
         contents: write
       steps:
-        # - name: salutation
-        #   run: |
-        #     echo This is on_push for chameleon service. branch=${{ github.ref_name }}
-
-        # - name: Checkout sources
-        #   uses: actions/checkout@v4
-        #   with:
-        #     fetch-depth: 0  
-
         - name: Setup Java
           uses: actions/setup-java@v4
           with:
@@ -31,7 +22,7 @@ jobs:
 
         - name: Get the application artifact version
           id: version
-          uses: keeonline/reference-github-actions/actions/artifact-version@tags
+          uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.26
 
         - name: Build application with Gradle
           run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon

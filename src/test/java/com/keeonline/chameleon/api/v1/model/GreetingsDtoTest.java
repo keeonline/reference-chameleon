@@ -8,8 +8,8 @@ public class GreetingsDtoTest {
 
     @Test
     void shouldReturnCustomisedGreeting() {
-        GreetingsDto dto = new GreetingsDto("carlos-fandango");
-        assertEquals("This is the carlos-fandango service!", dto.getMessage());
+        GreetingsDto dto = new GreetingsDto("carlos-v0.0.61");
+        assertEquals("This is the carlos-v0.0.61 service!", dto.getMessage());
     }
 
 }

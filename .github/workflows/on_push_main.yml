@@ -11,15 +11,6 @@ jobs:
       permissions:
         contents: write
       steps:
-        # - name: salutation
-        #   run: |
-        #     echo This is on_push for chameleon service. branch=${{ github.ref_name }}
-
-        # - name: Checkout sources
-        #   uses: actions/checkout@v4
-        #   with:
-        #     fetch-depth: 0  
-
         - name: Setup Java
           uses: actions/setup-java@v4
           with:
@@ -30,11 +21,11 @@ jobs:
           uses: gradle/actions/setup-gradle@v4
 
         - name: Get the application artifact version
-          id: versions
-          uses: keeonline/gh-actions/actions/artifact-version@v0.0.6
+          id: version
+          uses: keeonline/reference-github-actions/actions/artifact-version@v0.0.26
 
         - name: Build application with Gradle
-          run: ./gradlew -Pversion=${{steps.versions.outputs.release}} build --no-daemon
+          run: ./gradlew -Pversion=${{steps.version.outputs.value}} build --no-daemon
 
         - name: Show build outputs
           run: |
@@ -53,23 +44,23 @@ jobs:
         - name: Tag repo
           uses: richardsimko/update-tag@v1.1.6
           with:
-            tag_name: ${{steps.versions.outputs.release}}
+            tag_name: ${{steps.version.outputs.value}}
           env:
             GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
         - name: Build image
           run: | 
-            docker build --build-arg VERSION=${{steps.versions.outputs.release}} \
-                         -t chameleon:${{steps.versions.outputs.release}} \
+            docker build --build-arg VERSION=${{steps.version.outputs.value}} \
+                         -t chameleon:${{steps.version.outputs.value}} \
                          .  
 
         - name: List image 
           run: | 
-            docker image ls chameleon:${{steps.versions.outputs.release}}
+            docker image ls chameleon:${{steps.version.outputs.value}}
 
         - name: Inspect image
           run: | 
-            docker inspect --type=image chameleon:${{steps.versions.outputs.release}}
+            docker inspect --type=image chameleon:${{steps.version.outputs.value}}
 
         - name: Login to Docker registry
           uses: docker/login-action@v3
@@ -79,8 +70,8 @@ jobs:
             
         - name: Tag image
           run: |
-            docker tag chameleon:${{steps.versions.outputs.release}} \
-                       ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+            docker tag chameleon:${{steps.version.outputs.value}} \
+                       ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
 
         - name: List chameleon images
           run: |
@@ -88,4 +79,4 @@ jobs:
 
         - name: Publish image
           run: |
-            docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.versions.outputs.release}}
+            docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}

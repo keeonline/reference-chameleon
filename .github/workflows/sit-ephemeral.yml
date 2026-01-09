@@ -42,7 +42,6 @@ jobs:
       action: apply
       environment: ${{ needs.sit-config.outputs.infra_environment }}
       vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
-      checkout_repo: true
       repo_name: ${{ needs.sit-config.outputs.repo_name }}
       repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
 
@@ -102,6 +101,5 @@ jobs:
       action: destroy
       environment: ${{ needs.sit-config.outputs.infra_environment }}
       vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
-      checkout_repo: true
       repo_name: ${{ needs.sit-config.outputs.repo_name }}
       repo_ref: ${{ needs.sit-config.outputs.repo_ref }}

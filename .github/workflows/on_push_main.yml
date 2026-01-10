@@ -87,10 +87,6 @@ jobs:
     name: Run SITs
     needs: [ push-to-main ]
     uses: ./.github/workflows/on-event-sit.yml
-  sits:
-    name: Run SITs
-    needs: [ push-to-main ]
-    uses: ./.github/workflows/on-event-sit.yml
     permissions:
       id-token: write
     secrets:

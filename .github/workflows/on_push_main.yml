@@ -10,6 +10,8 @@ jobs:
       runs-on: ubuntu-24.04
       permissions:
         contents: write
+      outputs:
+        app_ref: ${{steps.version.outputs.value}}
       steps:
         - name: Setup Java
           uses: actions/setup-java@v4
@@ -80,3 +82,94 @@ jobs:
         - name: Publish image
           run: |
             docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+
+  sit-config:
+    name: Get config
+    runs-on: ubuntu-24.04
+    outputs:
+      app_environment: ${{ steps.values.outputs.this_environment }}
+      repo_name: ${{ steps.values.outputs.repo_name }}
+      repo_ref: ${{ steps.values.outputs.repo_ref }}
+      infra_environment: ${{ steps.values.outputs.this_environment }}
+      vpc_cidr: ${{ steps.values.outputs.vpc_cidr }}
+    steps:
+      - name: Determine values
+        id: values
+        run: |
+          echo "repo_name=keeonline/reference-infra-aws" >> $GITHUB_OUTPUT    
+          echo "repo_ref=v0.0.61" >> $GITHUB_OUTPUT
+          THIS=$(shuf -i 201-255 -n 1)
+          echo "this_environment=eph$THIS" >> $GITHUB_OUTPUT
+          echo "vpc_cidr=10.$THIS.0.0/16" >> $GITHUB_OUTPUT
+
+  provision-infra:
+    name: Provision
+    needs: [ push-to-main, sit-config ]
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.61
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      repo_name: ${{ needs.sit-config.outputs.repo_name }}
+      repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}
+
+  deploy-app:
+    name: Deploy
+    needs: [ sit-config, provision-infra ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      repo_ref: ${{ needs.push-to-main.outputs.app_ref }}
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
+
+  execute-sit:
+    name: Run the SITs against a deployed application
+    needs: [ sit-config, deploy-app ]
+    uses: ./.github/workflows/reusable-sit-execution.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment }}
+
+  undeploy-app:
+    name: Undeploy
+    needs: [ sit-config, execute-sit ]
+    if: always()
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      repo_ref: ${{ needs.push-to-main.outputs.app_ref }}
+      app_environment: ${{ needs.sit-config.outputs.app_environment }}
+      infra_environment: ${{ needs.sit-config.outputs.infra_environment}}
+
+  destroy-infra:
+    name: Destroy
+    needs: [ sit-config, undeploy-app ]
+    if: always()
+    uses: keeonline/reference-infra-aws/.github/workflows/reusable-manage-infra.yml@v0.0.61
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: destroy
+      repo_name: ${{ needs.sit-config.outputs.repo_name }}
+      repo_ref: ${{ needs.sit-config.outputs.repo_ref }}
+      environment: ${{ needs.sit-config.outputs.infra_environment }}
+      vpc_cidr: ${{ needs.sit-config.outputs.vpc_cidr }}

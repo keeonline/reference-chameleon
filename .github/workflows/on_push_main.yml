@@ -119,7 +119,7 @@ jobs:
 
   deploy-app:
     name: Deploy
-    needs: [ sit-config, provision-infra ]
+    needs: [ push-to-main, sit-config, provision-infra ]
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write
@@ -145,7 +145,7 @@ jobs:
 
   undeploy-app:
     name: Undeploy
-    needs: [ sit-config, execute-sit ]
+    needs: [ push-to-main, sit-config, execute-sit ]
     if: always()
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:

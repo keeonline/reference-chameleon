@@ -87,9 +87,13 @@ jobs:
     name: Run SITs
     needs: [ push-to-main ]
     uses: ./.github/workflows/on-event-sit.yml
+  sits:
+    name: Run SITs
+    needs: [ push-to-main ]
+    uses: ./.github/workflows/on-event-sit.yml
     permissions:
       id-token: write
     secrets:
       inherit
     with:
-      app_ref: ${{ steps.version.outputs.value }}
+      app_ref: ${{ needs.push-to-main.outputs.app_ref }}

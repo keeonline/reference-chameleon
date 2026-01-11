@@ -93,3 +93,31 @@ jobs:
       inherit
     with:
       app_ref: ${{ needs.push-to-main.outputs.app_ref }}
+
+  prod-config:
+    name: Get production config
+    needs: [ sits ]
+    runs-on: ubuntu-24.04
+    environment: prod
+    outputs:
+      infra_environment: ${{ vars.INFRA_ENVIRONMENT }}
+      az_use_count: ${{ vars.AZ_USE_COUNT }}
+      base_alb_listener_rule_priority: ${{ vars.BASE_ALB_LISTENER_RULE_PRIORITY }}
+    steps:
+      - name: Determine values
+        run: echo ""
+
+  deploy-to-prod:
+    name: Deploy to prod
+    needs: [ prod-config ]
+    uses: ./.github/workflows/reusable-manage-deployment.yml
+    permissions:
+      id-token: write
+    secrets:
+      inherit
+    with:
+      action: apply
+      app_environment: prod
+      infra_environment: prod
+      az_use_count: ${{ needs.prod-config.outputs.az_use_count }}
+      base_alb_listener_rule_priority: ${{ needs.prod-config.outputs.base_alb_listener_rule_priority }}

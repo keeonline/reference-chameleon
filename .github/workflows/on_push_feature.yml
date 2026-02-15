@@ -8,12 +8,12 @@ on:
 
 jobs:
     feature-push:
-    name: Build snapshot version
-    uses: keeonline/reference-gh-workflows/.github/workflows/app-on-push-feature.yml@app-on-push
-    permissions:
-      id-token: write
-    secrets:
-      inherit
+      name: Build snapshot version
+      uses: keeonline/reference-gh-workflows/.github/workflows/app-on-push-feature.yml@app-on-push
+      permissions:
+        id-token: write
+      secrets:
+        inherit
 
 
         # name: Build snapshot version

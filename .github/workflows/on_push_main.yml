@@ -58,16 +58,16 @@ jobs:
         - name: Build image
           run: | 
             docker build --build-arg VERSION=${{steps.version.outputs.value}} \
-                         -t chameleon:${{steps.version.outputs.value}} \
+                         -t reference-chameleon:${{steps.version.outputs.value}} \
                          .  
 
         - name: List image 
           run: | 
-            docker image ls chameleon:${{steps.version.outputs.value}}
+            docker image ls reference-chameleon:${{steps.version.outputs.value}}
 
         - name: Inspect image
           run: | 
-            docker inspect --type=image chameleon:${{steps.version.outputs.value}}
+            docker inspect --type=image reference-chameleon:${{steps.version.outputs.value}}
 
         - name: Login to Docker registry
           uses: docker/login-action@v3
@@ -77,8 +77,8 @@ jobs:
             
         - name: Tag image
           run: |
-            docker tag chameleon:${{steps.version.outputs.value}} \
-                       ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+            docker tag reference-chameleon:${{steps.version.outputs.value}} \
+                       ${{vars.DOCKERHUB_USERNAME}}/reference-chameleon:${{steps.version.outputs.value}}
 
         - name: List chameleon images
           run: |
@@ -86,7 +86,7 @@ jobs:
 
         - name: Publish image
           run: |
-            docker push ${{vars.DOCKERHUB_USERNAME}}/chameleon:${{steps.version.outputs.value}}
+            docker push ${{vars.DOCKERHUB_USERNAME}}/reference-chameleon:${{steps.version.outputs.value}}
 
   sits:
     name: Run SITs

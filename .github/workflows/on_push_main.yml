@@ -102,7 +102,7 @@ jobs:
   prod-config:
     name: Get production config
     needs: [ sits ]
-    if: ${{ inputs.auto_prod_deploy }} 
+    if: ${{ contains(inputs.auto_prod_deploy,'true') }} 
     runs-on: ubuntu-24.04
     environment: prod
     outputs:
@@ -116,7 +116,7 @@ jobs:
   deploy-to-prod:
     name: Deploy to prod
     needs: [ prod-config ]
-    if: ${{ inputs.auto_prod_deploy }} 
+    if: ${{ contains(inputs.auto_prod_deploy,'true') }} 
     uses: ./.github/workflows/reusable-manage-deployment.yml
     permissions:
       id-token: write

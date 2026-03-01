@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "alpha" {
   container_definitions = jsonencode([
     {
       name  = "${var.app_environment}-task-alpha"
-      image = "docker.io/keeonline/chameleon:${var.app_version}"
+      image = "docker.io/keeonline/reference-chameleon:${var.app_version}"
       environment = [
         { "name" : "SERVICE_NAME", "value" : "alpha" },
         { "name" : "APP_ENV", "value" : "${var.app_environment}" },
